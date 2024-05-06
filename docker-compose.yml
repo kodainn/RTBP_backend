@@ -1,0 +1,15 @@
+version: '1'
+services:
+  backend:
+    container_name: library_manage_backend
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./
+        target: /code/app
+    restart: always
+    tty: true
+    ports:
+      - 8090:80
