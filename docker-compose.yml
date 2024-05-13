@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
     volumes:
       - type: bind
-        source: ./
+        source: ./app
         target: /code/app
     restart: always
     tty: true
     ports:
-      - 8090:80
+      - 8000:80
