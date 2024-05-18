@@ -10,9 +10,10 @@ class Book(BaseModel):
     title:   str
     img_url: str
 
-class ShelveInListBooks(BaseModel):    
-    shelve_name: str
-    books:       List[Book]
+class ShelveInListBooks(BaseModel):
+    id:    int
+    name:  str
+    books: List[Book]
 
 
 class ListShelves(BaseModel):
