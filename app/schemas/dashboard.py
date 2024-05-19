@@ -6,6 +6,8 @@ from pydantic import BaseModel
 class StudyBookProgress(BaseModel):
     study_books_completed_count:  int
     study_books_incomplete_count: int
+    start_study_period_on:        date
+    end_study_period_on:          date
 
 
 class StudyTimesByWeek(BaseModel):

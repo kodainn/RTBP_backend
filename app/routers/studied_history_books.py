@@ -6,9 +6,9 @@ from app.utils.auth import oauth2_scheme
 router = APIRouter()
 
 @router.get("/studied-history-books", response_model=schema.ListStudiedHistoryBooks)
-async def list_studied_history_books(access_token: str = Depends(oauth2_scheme)):
+async def list_studied_history_books():
     pass
 
 @router.get("/studied-history-books/{id}", response_model=schema.ListStudiedHistories)
-async def individual_studied_history_book(access_token: str = Depends(oauth2_scheme)):
+async def individual_studied_history_book():
     pass
