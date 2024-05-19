@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class CreateToken(BaseModel):
@@ -9,8 +9,3 @@ class CreateToken(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type:   str
-
-class Register(BaseModel):
-    name:     str
-    email:    str
-    password: str

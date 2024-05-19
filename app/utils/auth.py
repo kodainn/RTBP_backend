@@ -1,5 +1,4 @@
 from datetime import timedelta
-import hashlib
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -48,14 +47,3 @@ def get_current_user(access_token: str = Depends(oauth2_scheme), session: Sessio
     if user is None:
         raise credentials_exception
     return user
-
-
-def create_hash_password(plaintext_password: str) -> str:
-    return hashlib.sha256(plaintext_password.encode()).hexdigest()
-
-
-def vertify_password(hash_password: str, plaintext_password: str) -> bool:
-    if hashlib.sha256(plaintext_password.encode()).hexdigest() != hash_password:
-        return False
-    
-    return True
