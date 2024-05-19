@@ -1,24 +1,27 @@
-from fastapi import APIRouter
-import app.schemas.books as schema # type: ignore
+from fastapi import APIRouter, Depends
+
+import app.schemas.books as schema
+from app.utils.auth import oauth2_scheme
+from app.utils.auth import get_current_user
 
 router = APIRouter()
 
 
 @router.get("/books/{id}", response_model=schema.Book)
-async def individual_book():
+async def individual_book(user: str = Depends(get_current_user)):
     pass
 
 
 @router.post("/books")
-async def create_book(req_body: schema.CreateBook):
+async def create_book(req_body: schema.CreateBook, access_token: str = Depends(oauth2_scheme)):
     pass
 
 
 @router.patch("/books/{id}")
-async def update_book(req_body: schema.UpdateBook):
+async def update_book(req_body: schema.UpdateBook, access_token: str = Depends(oauth2_scheme)):
     pass
 
 
 @router.delete("/books/{id}")
-async def delete_book():
+async def delete_book(access_token: str = Depends(oauth2_scheme)):
     pass

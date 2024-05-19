@@ -8,7 +8,7 @@ class CreateToken(BaseModel):
 
 class Token(BaseModel):
     access_token: str
-
+    token_type:   str
 
 class Register(BaseModel):
     name:     str

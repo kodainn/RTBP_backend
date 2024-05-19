@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from config import get_env_value
-from database.models import User, Shelve, Book, StudyingBook, TargetItem, StudyingTrack
+from database.model.models import User, Shelve, Book, StudyingBook, TargetItem, StudyingTrack
 
 
 def randomname(n):
@@ -12,7 +12,7 @@ def randomname(n):
    return ''.join(randlst)
 
 
-def seeding() -> None:
+def seeder() -> None:
     engine = create_engine(str(get_env_value("DATABASE_URL")), echo=True)
     Session = sessionmaker(bind=engine)
     session = Session()
