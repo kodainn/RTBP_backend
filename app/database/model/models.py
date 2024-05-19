@@ -56,7 +56,8 @@ class StudyingBook(Base):
     target_on     = Column(Date, nullable=False)
     user_id       = Column(Integer, ForeignKey("users.id"))
     book_id       = Column(Integer, ForeignKey("books.id"))
-    is_deleted    = Column(Boolean, default=False)
+    is_complated  = Column(Boolean, default=False)
+    is_deleted    = Column(Boolean, default=False) 
     created_at    = Column(DateTime, default=func.now())
     updated_at    = Column(DateTime, default=func.now(), onupdate=func.now())
 

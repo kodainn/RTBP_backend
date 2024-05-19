@@ -13,12 +13,12 @@ async def individual_book(user: str = Depends(get_current_user)):
 
 
 @router.post("/books")
-async def create_book(req_body: schema.CreateBook, access_token: str = Depends(oauth2_scheme)):
+async def create_book(req_body: schema.CreateBook):
     pass
 
 
 @router.patch("/books/{id}")
-async def update_book(req_body: schema.UpdateBook, access_token: str = Depends(oauth2_scheme)):
+async def update_book(req_body: schema.UpdateBook):
     pass
 
 
