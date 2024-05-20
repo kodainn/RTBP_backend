@@ -22,8 +22,8 @@ class StudyTimes(BaseModel):
 
 class BookCountsByShelve(BaseModel):
     shelve_name: str
-    books_count: int
+    book_count: int
 
 class BookCounts(BaseModel):
-    books_total_count:      int
-    books_count_by_shelve:  List[BookCountsByShelve]
+    book_total_count:      int
+    book_count_by_shelve:  List[Optional[BookCountsByShelve]]

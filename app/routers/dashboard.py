@@ -25,5 +25,7 @@ async def study_times(session: Session = Depends(get_db)):
 
 
 @router.get("/dashboard/book-counts", response_model=BookCounts)
-async def book_counts():
-    pass
+async def book_counts(session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    book_counts = DashboardService(session, user).book_counts()
+    return book_counts

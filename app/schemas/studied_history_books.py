@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 from datetime import date
 
@@ -9,7 +9,7 @@ class StudiedHistoryBook(BaseModel):
     studied_count: int
 
 class ListStudiedHistoryBooks(BaseModel):
-    studied_history_books: List[StudiedHistoryBook]
+    studied_history_books: List[Optional[StudiedHistoryBook]]
 
 
 class TargetItem(BaseModel):
@@ -21,9 +21,9 @@ class StudiedHistory(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
-    target_items: List[TargetItem]
+    target_items: List[Optional[TargetItem]]
     memo:         str
     study_minutes:  int
 
 class ListStudiedHistories(BaseModel):
-    studied_histories: List[StudiedHistory]
+    studied_histories: List[Optional[StudiedHistory]]
