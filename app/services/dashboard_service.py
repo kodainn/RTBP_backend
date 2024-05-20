@@ -2,13 +2,15 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.repositories.studying_book_repository import StudyingBookRepository
-from app.schemas.dashboard import StudyBookProgress
+from app.repositories.study_track_repository import StudyTrackRepository
+from app.schemas.dashboard import StudyBookProgress, StudyTimes
 from app.database.model.models import User
 import app.utils.datetime_jp as datetime_jp
 
 class DashboardService:
     def __init__(self, session: Session, user: User):
         self.studying_book_repository = StudyingBookRepository(session)
+        self.study_track_repository = StudyTrackRepository(session)
         self.user = user
     
 
@@ -24,4 +26,13 @@ class DashboardService:
             start_study_period_on=period["start_study_period_on"],
             end_study_period_on=period["end_study_period_on"]
         )
-
+    
+    
+    def study_times(self) -> StudyTimes:
+        total_minutes = self.study_track_repository.total_minutes_by_user_id(self.user.id)
+        monthly_total_by_year = self.study_track_repository.monthly_total_by_year_by_user_id(2024, self.user.id)
+        
+        return StudyTimes(
+            study_minutes_total=total_minutes,
+            study_minutes_by_monthly=monthly_total_by_year
+        )

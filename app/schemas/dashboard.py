@@ -1,25 +1,23 @@
 from datetime import date
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
 class StudyBookProgress(BaseModel):
     study_books_completed_count:  int
     study_books_incomplete_count: int
-    start_study_period_on:        date
-    end_study_period_on:          date
+    start_study_period_on:        Optional[date]
+    end_study_period_on:          Optional[date]
 
 
-class StudyTimesByWeek(BaseModel):
-    months_and_years:           str
-    study_minutes_by_first_week:  int
-    study_minutes_by_second_week: int
-    study_minutes_by_third_week:  int
-    study_minutes_by_fourth_week: int
+class StudyTimesByMonthly(BaseModel):
+    year:          int
+    month:         int
+    study_minutes: int
 
 class StudyTimes(BaseModel):
     study_minutes_total:      int
-    study_minutes_by_monthly: List[StudyTimesByWeek]
+    study_minutes_by_monthly: List[Optional[StudyTimesByMonthly]]
 
 
 class BookCountsByShelve(BaseModel):
