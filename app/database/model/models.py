@@ -62,7 +62,7 @@ class StudyingBook(Base):
     updated_at    = Column(DateTime, default=func.now(), onupdate=func.now())
 
     target_items  = relationship("TargetItem", backref="studying_book")
-    study_tracks  = relationship("StudyingTrack", backref="studying_book")
+    study_tracks  = relationship("StudyTrack", backref="studying_book")
 
 
 class TargetItem(Base):
@@ -77,7 +77,7 @@ class TargetItem(Base):
     updated_at       = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
-class StudyingTrack(Base):
+class StudyTrack(Base):
     __tablename__    = 'study_tracks'
 
     id               = Column(Integer, primary_key=True, autoincrement=True)

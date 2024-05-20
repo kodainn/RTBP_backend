@@ -18,8 +18,10 @@ async def study_book_progress(session: Session = Depends(get_db)):
 
 
 @router.get("/dashboard/study-times", response_model=StudyTimes)
-async def study_times():
-    pass
+async def study_times(session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    study_times = DashboardService(session, user).study_times()
+    return study_times
 
 
 @router.get("/dashboard/book-counts", response_model=BookCounts)

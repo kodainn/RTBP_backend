@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from config import get_env_value
-from database.model.models import User, Shelve, Book, StudyingBook, TargetItem, StudyingTrack
+from database.model.models import User, Shelve, Book, StudyingBook, TargetItem, StudyTrack
 
 
 def randomname(n):
@@ -89,7 +89,7 @@ def seeder() -> None:
             session.bulk_insert_mappings(Book, books)
             session.bulk_insert_mappings(StudyingBook, studying_books)
             session.bulk_insert_mappings(TargetItem, target_items)
-            session.bulk_insert_mappings(StudyingTrack, study_tracks)
+            session.bulk_insert_mappings(StudyTrack, study_tracks)
             session.commit()
     except Exception as e:
         print("えらーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー:", e)
