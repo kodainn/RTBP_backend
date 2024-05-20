@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import List, Optional
 from pydantic import BaseModel
 
 class Shelve(BaseModel):
@@ -13,11 +13,11 @@ class Book(BaseModel):
 class ShelveInListBooks(BaseModel):
     id:    int
     name:  str
-    books: List[Book]
+    books: List[Optional[Book]]
 
 
 class ListShelves(BaseModel):
-    shelves: List[ShelveInListBooks]
+    shelves: List[Optional[ShelveInListBooks]]
 
 
 class CreateShelve(BaseModel):
