@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, selectinload, load_only
 from sqlalchemy import func
 
 from app.database.model.models import Shelve
-from app.schemas.shelves import CreateShelve
+from app.schemas.shelves import CreateShelve, UpdateShelve
 
 
 
@@ -25,7 +25,7 @@ class ShelveRepository:
         return result
     
     
-    def user_has_individual_by_id(self, user_id: str, id: int) -> Optional[Shelve]:
+    def user_has_individual_by_id(self, user_id: int, id: int) -> Optional[Shelve]:
         query = self.session.query(Shelve)
         query = query.filter_by(user_id=user_id, id=id)
 
@@ -50,3 +50,15 @@ class ShelveRepository:
         self.session.refresh(shelve)
 
         return shelve
+    
+
+    def update(self, user_id: int, id: int, update_shelve: UpdateShelve) -> Shelve:
+        query = self.session.query(Shelve)
+        query = query.filter_by(user_id=user_id, id=id)
+
+        result = query.first()
+        result.name = update_shelve.name
+
+        self.session.commit()
+        
+        return result

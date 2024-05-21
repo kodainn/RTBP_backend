@@ -37,9 +37,11 @@ async def create_shelve(req_body: CreateShelve, session: Session = Depends(get_d
     return shelve
 
 
-@router.patch("/shelves/{id}")
-async def update_shelve(req_body: UpdateShelve):
-    pass
+@router.patch("/shelves/{id}", response_model=OutputShelve)
+async def update_shelve(id: int, req_body: UpdateShelve, session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    shelve = ShelveService(session, user).update(id, req_body)
+    return shelve
 
 
 @router.delete("/shelves/{id}")
