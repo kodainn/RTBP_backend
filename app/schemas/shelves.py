@@ -21,7 +21,7 @@ class Book(BaseModel):
 class ShelveInListBooks(BaseModel):
     id:    int
     name:  str
-    books: List
+    books: List[Book]
 
     class Config:
         orm_mode = True
