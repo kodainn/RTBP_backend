@@ -26,8 +26,11 @@ async def individual_shelve(id: int, session: Session = Depends(get_db)):
 
 
 @router.get("/shelves/{id}/books", response_model=ShelveInListBooks)
-async def shelve_in_list_books():
-    pass
+async def shelve_in_list_books(id: int, session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    shelve_in_books = ShelveService(session, user).shelve_in_list_books(id)
+    
+    return shelve_in_books
 
 
 @router.post("/shelves", status_code=status.HTTP_201_CREATED, response_model=OutputShelve)

@@ -23,6 +23,17 @@ class ShelveRepository:
     
         return result
     
+
+    def user_has_shelve_in_books(self, user_id: int, id: int) -> Shelve:
+        query = self.session.query(Shelve)
+        query = query.options(load_only('id', 'name'))
+        query = query.options(selectinload(Shelve.books).load_only('id', 'title', 'img_url'))        
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+
+        result = query.first()
+    
+        return result
+    
     
     def user_has_individual_by_id(self, user_id: int, id: int) -> Optional[Shelve]:
         query = self.session.query(Shelve)
