@@ -10,6 +10,9 @@ class StudyingBook(BaseModel):
     start_on:  date
     target_on: date
 
+    class Config:
+        orm_mode = True
+
 class ListStudyingBooks(BaseModel):
     studying_books: List[StudyingBook]
 
@@ -19,16 +22,23 @@ class TargetItem(BaseModel):
     description:  str
     is_complated: bool
 
+    class Config:
+        orm_mode = True
+
 class IndividualStudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
     target_items: List[TargetItem]
 
+    class Config:
+        orm_mode = True
+
 
 class CrateTargetItem(BaseModel):
     description: str
 
+    
 class CreateStudyingBook(BaseModel):
     book_id:      int
     target_items: List[CrateTargetItem]
@@ -38,6 +48,7 @@ class CreateStudyingBook(BaseModel):
 class CreateComplateTargetItem(BaseModel):
     id:           int
     is_complated: bool
+
 
 class CreateStudyingBookRecord(BaseModel):
     target_complate_items: List[CreateComplateTargetItem]

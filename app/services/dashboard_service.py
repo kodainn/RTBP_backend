@@ -18,9 +18,9 @@ class DashboardService:
 
     def studying_book_progress(self) -> StudyBookProgress:
         period_on = datetime_jp.now_date()
-        complate_count = self.studying_book_repository.complated_count_in_period_by_user_id(period_on, self.user.id)
-        incomplete_count = self.studying_book_repository.incomplete_count_in_period_by_user_id(period_on, self.user.id)
-        period = self.studying_book_repository.period_by_user_id(period_on, self.user.id)
+        complate_count = self.studying_book_repository.user_has_complated_count_in_period(period_on, self.user.id)
+        incomplete_count = self.studying_book_repository.user_has_incompleted_count_in_period(period_on, self.user.id)
+        period = self.studying_book_repository.user_has_period(period_on, self.user.id)
 
         return StudyBookProgress(
             study_books_completed_count=complate_count,
@@ -31,8 +31,9 @@ class DashboardService:
     
     
     def study_times(self) -> StudyTimes:
-        total_minutes = self.study_track_repository.total_minutes_by_user_id(self.user.id)
-        monthly_total_by_year = self.study_track_repository.monthly_total_by_year_by_user_id(2024, self.user.id)
+        total_minutes = self.study_track_repository.user_has_total_minutes(self.user.id)
+        now_year = datetime_jp.now_year()
+        monthly_total_by_year = self.study_track_repository.user_has_monthly_total_by_year(now_year, self.user.id)
         
         return StudyTimes(
             study_minutes_total=total_minutes,
@@ -41,8 +42,8 @@ class DashboardService:
     
 
     def book_counts(self) -> BookCounts:
-        book_count = self.book_repository.has_user_count(self.user.id)
-        book_count_by_shelve = self.book_repository.has_user_count_by_shelve(self.user.id)
+        book_count = self.book_repository.user_has_count(self.user.id)
+        book_count_by_shelve = self.book_repository.user_has_count_list_by_shelve(self.user.id)
 
         return BookCounts(
             book_total_count=book_count,

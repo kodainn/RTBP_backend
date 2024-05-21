@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 @router.get("/books/{id}", response_model=schema.Book)
-async def individual_book(user: str = Depends(get_current_user)):
+async def individual_book():
     pass
 
 
@@ -23,5 +23,5 @@ async def update_book(req_body: schema.UpdateBook):
 
 
 @router.delete("/books/{id}")
-async def delete_book(access_token: str = Depends(oauth2_scheme)):
+async def delete_book():
     pass

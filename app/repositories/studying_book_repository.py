@@ -1,6 +1,6 @@
 from datetime import date
 
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -13,42 +13,48 @@ class StudyingBookRepository:
         self.session = session
     
 
-    def complated_count_in_period_by_user_id(self, period_on: date, user_id: int) -> int:
-        count = self.session.query(StudyingBook).filter(
+    def user_has_complated_count_in_period(self, period_on: date, user_id: int) -> int:
+        query = self.session.query(StudyingBook)
+        query = query.filter(
                 StudyingBook.user_id == user_id,
                 StudyingBook.start_on <= period_on,
                 StudyingBook.target_on >= period_on,
                 StudyingBook.is_complated == True,
                 StudyingBook.is_deleted == False
-            ).count()
+            )
+        
+        result = query.count()
 
-        return count
+        return result
 
     
-    def incomplete_count_in_period_by_user_id(self, period_on: date, user_id: int) -> int:
-        count = self.session.query(StudyingBook).filter(
+    def user_has_incompleted_count_in_period(self, period_on: date, user_id: int) -> int:
+        query = self.session.query(StudyingBook)
+        query = query.filter(
                 StudyingBook.user_id == user_id,
                 StudyingBook.start_on <= period_on,
                 StudyingBook.target_on >= period_on,
                 StudyingBook.is_complated == False,
                 StudyingBook.is_deleted == False
-            ).count()
+            )
+        
+        result = query.count()
 
-        return count
+        return result
     
 
-    def period_by_user_id(self, period_on: date, user_id: int) -> Dict[str, date]:
+    def user_has_period(self, period_on: date, user_id: int) -> Dict:
         query = self.session.query(
                 func.min(StudyingBook.start_on).label("start_study_period_on"),
                 func.max(StudyingBook.target_on).label('end_study_period_on')
-            ).filter(
+            )
+        query = query.filter(
                 StudyingBook.user_id == user_id,
                 StudyingBook.start_on <= period_on,
                 StudyingBook.target_on >= period_on,
-                StudyingBook.is_complated == False,
                 StudyingBook.is_deleted == False
-            ).group_by(StudyingBook.user_id)
+            )
         
-        period = query.first()
-
-        return period
+        result = query.first()
+        
+        return result
