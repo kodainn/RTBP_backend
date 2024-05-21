@@ -2,7 +2,6 @@ from datetime import date
 
 from typing import Optional, List
 from sqlalchemy.orm import Session, selectinload, load_only
-from sqlalchemy import func
 
 from app.database.model.models import Shelve
 from app.schemas.shelves import CreateShelve, UpdateShelve
@@ -18,7 +17,7 @@ class ShelveRepository:
         query = self.session.query(Shelve)
         query = query.options(load_only('id', 'name'))
         query = query.options(selectinload(Shelve.books).load_only('id', 'title', 'img_url'))        
-        query = query.filter_by(user_id=user_id)
+        query = query.filter_by(user_id=user_id, is_deleted=False)
 
         result = query.all()
     
@@ -27,7 +26,7 @@ class ShelveRepository:
     
     def user_has_individual_by_id(self, user_id: int, id: int) -> Optional[Shelve]:
         query = self.session.query(Shelve)
-        query = query.filter_by(user_id=user_id, id=id)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
 
         result = query.first()
 
@@ -36,7 +35,7 @@ class ShelveRepository:
     
     def user_has_has_shelve_by_shelve_name(self, user_id: int, shelve_name: str) -> bool:
         query = self.session.query(Shelve)
-        query = query.filter_by(user_id=user_id, name=shelve_name)
+        query = query.filter_by(user_id=user_id, name=shelve_name, is_deleted=False)
 
         result = query.first()
 
@@ -54,7 +53,7 @@ class ShelveRepository:
 
     def update(self, user_id: int, id: int, update_shelve: UpdateShelve) -> Shelve:
         query = self.session.query(Shelve)
-        query = query.filter_by(user_id=user_id, id=id)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
 
         result = query.first()
         result.name = update_shelve.name
@@ -62,3 +61,13 @@ class ShelveRepository:
         self.session.commit()
         
         return result
+    
+
+    def delete(self, user_id: int, id: int) -> None:
+        query = self.session.query(Shelve)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+
+        result = query.first()
+        result.is_deleted = True
+
+        self.session.commit()

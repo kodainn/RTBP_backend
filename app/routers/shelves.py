@@ -44,6 +44,9 @@ async def update_shelve(id: int, req_body: UpdateShelve, session: Session = Depe
     return shelve
 
 
-@router.delete("/shelves/{id}")
-async def delete_shelve():
-    pass
+@router.delete("/shelves/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_shelve(id: int, session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    ShelveService(session, user).delete(id)
+
+    return
