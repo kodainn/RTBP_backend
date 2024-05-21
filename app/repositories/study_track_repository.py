@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, exists, and_, cast, Integer
 
 from app.database.model.models import StudyingBook, StudyTrack
-from app.schemas.dashboard import StudyTimesByMonthly
 
 
 class StudyTrackRepository:
