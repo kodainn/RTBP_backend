@@ -22,7 +22,7 @@ class Shelve(Base):
     __tablename__ = 'shelves'
 
     id            = Column(Integer, primary_key=True, autoincrement=True)
-    name          = Column(String(50), nullable=False)
+    name          = Column(String(50), nullable=False, unique=True)
     user_id       = Column(Integer, ForeignKey("users.id"))
     is_deleted    = Column(Boolean, default=False)
     created_at    = Column(DateTime, default=func.now())

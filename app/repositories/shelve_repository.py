@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, selectinload, load_only
 from sqlalchemy import func
 
 from app.database.model.models import Shelve, Book
-from app.schemas.shelves import ShelveInListBooks
+from app.schemas.shelves import CreateShelve, OutputShelve
 
 
 
@@ -23,3 +23,24 @@ class ShelveRepository:
         result = query.all()
     
         return result
+    
+    
+    def user_has_has_shelve(self, shelve_name: str) -> bool:
+        query = self.session.query(Shelve)
+        query = query.filter_by(name=shelve_name)
+
+        result = query.first()
+
+        return result is not None
+    
+
+    def create(self, create_shelve: CreateShelve) -> OutputShelve:
+        shelve = Shelve(name=create_shelve.name)
+        self.session.add(shelve)
+        self.session.commit()
+        self.session.refresh(shelve)
+
+        return OutputShelve(
+            id=shelve.id,
+            name=shelve.name
+        )

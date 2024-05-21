@@ -1,7 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
-class Shelve(BaseModel):
+class OutputShelve(BaseModel):
     id:   int
     name: str
 
