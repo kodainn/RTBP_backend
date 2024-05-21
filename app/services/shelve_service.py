@@ -65,3 +65,15 @@ class ShelveService:
             id=shelve.id,
             name=shelve.name
         )
+    
+
+    def delete(self, id: int) -> None:
+        shelve = self.shelve_repository.user_has_individual_by_id(self.user.id, id)
+        if shelve is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="その本棚は存在しません。"
+            )
+        
+        self.shelve_repository.delete(id, self.user.id)
+

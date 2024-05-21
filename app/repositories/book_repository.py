@@ -15,7 +15,7 @@ class BookRepository:
 
     def user_has_count(self, user_id: int) -> int:
         query = self.session.query(Book)
-        query = query.filter_by(user_id=user_id)
+        query = query.filter_by(user_id=user_id, is_deleted=False)
 
         result = query.count()
 
@@ -28,7 +28,7 @@ class BookRepository:
                 func.count(Book.id).label("book_count")
             )
         query = query.join(Book, Book.shelve_id == Shelve.id)
-        query = query.filter_by(user_id=user_id)
+        query = query.filter_by(user_id=user_id, is_deleted=False)
         query = query.group_by("shelve_name")
         query = query.order_by("shelve_name")
         
