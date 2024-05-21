@@ -1,11 +1,10 @@
 from datetime import date
 
-from typing import Optional, List
+from typing import Optional, List, Dict
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from app.database.model.models import Book, Shelve
-from app.schemas.dashboard import BookCountsByShelve
 
 
 
@@ -14,28 +13,25 @@ class BookRepository:
         self.session = session
     
 
-    def has_user_count(self, user_id: int) -> int:
-        count = self.session.query(
-                Book
-            ).filter_by(
-                user_id=user_id
-            ).count()
+    def user_has_count(self, user_id: int) -> int:
+        query = self.session.query(Book)
+        query = query.filter_by(user_id=user_id)
 
-        return count
+        result = query.count()
+
+        return result
     
 
-    def has_user_count_by_shelve(self, user_id: int) -> List[Optional[BookCountsByShelve]]:
-        count_by_shelve = self.session.query(
+    def user_has_count_list_by_shelve(self, user_id: int) -> List:
+        query = self.session.query(
                 Shelve.name.label("shelve_name"),
                 func.count(Book.id).label("book_count")
-            ).join(
-                Book, Book.shelve_id == Shelve.id
-            ).filter_by(
-                user_id=user_id
-            ).group_by(
-                "shelve_name"
-            ).order_by(
-                "shelve_name"
-            ).all()
+            )
+        query = query.join(Book, Book.shelve_id == Shelve.id)
+        query = query.filter_by(user_id=user_id)
+        query = query.group_by("shelve_name")
+        query = query.order_by("shelve_name")
         
-        return count_by_shelve
+        result = query.all()
+
+        return result

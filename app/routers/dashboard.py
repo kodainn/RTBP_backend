@@ -14,8 +14,6 @@ async def study_book_progress(session: Session = Depends(get_db)):
     progress = DashboardService(session, user).studying_book_progress()
     return progress
 
-    
-
 
 @router.get("/dashboard/study-times", response_model=StudyTimes)
 async def study_times(session: Session = Depends(get_db)):

@@ -35,6 +35,7 @@ class Book(Base):
     __tablename__  = 'books'
 
     id             = Column(Integer, primary_key=True, autoincrement=True)
+    isbn           = Column(Integer)
     title          = Column(String(50), nullable=False)
     remark         = Column(String(255))
     img_url        = Column(Text)

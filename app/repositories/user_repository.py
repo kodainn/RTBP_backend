@@ -15,9 +15,12 @@ class UserRepository:
         if not username:
             return None
         
-        user = self.session.query(User).filter_by(name=username).first()
+        query = self.session.query(User)
+        query = query.filter_by(name=username)
+        
+        result = query.first()
 
-        return user
+        return result
     
     
     def create(self, create_user: CreateUser) -> OutputUser:

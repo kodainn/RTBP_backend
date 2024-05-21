@@ -10,6 +10,9 @@ class Book(BaseModel):
     remark:       Union[str, None]
     img_url:      Union[str, None]
 
+    class Config:
+        orm_mode = True
+
 
 class CreateBook(BaseModel):
     isbn:         int
