@@ -36,5 +36,4 @@ class CreateShelve(BaseModel):
 
 
 class UpdateShelve(BaseModel):
-    id:   int
     name: str

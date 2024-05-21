@@ -1,8 +1,10 @@
+import copy
+
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.schemas.shelves import ListShelves, CreateShelve, OutputShelve
-from app.database.model.models import User, Shelve
+from app.schemas.shelves import ListShelves, CreateShelve, OutputShelve, UpdateShelve
+from app.database.model.models import User
 from app.repositories.shelve_repository import ShelveRepository
 
 
@@ -42,6 +44,22 @@ class ShelveService:
             )
 
         shelve = self.shelve_repository.create(req_body)
+
+        return OutputShelve(
+            id=shelve.id,
+            name=shelve.name
+        )
+    
+
+    def update(self, id: int, req_body: UpdateShelve) -> OutputShelve:
+        shelve = self.shelve_repository.user_has_individual_by_id(self.user.id, id)
+        if shelve is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="その本棚は存在しません。"
+            )
+
+        shelve = self.shelve_repository.update(id, self.user.id, req_body)
 
         return OutputShelve(
             id=shelve.id,
