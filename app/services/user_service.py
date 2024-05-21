@@ -10,5 +10,9 @@ class UserService:
     
 
     def create(self, req_body: CreateUser) -> OutputUser:
-        output_user = self.user_repository.create(req_body)
-        return output_user
+        user = self.user_repository.create(req_body)
+        return OutputUser(
+            id=user.id,
+            name=user.name,
+            email=user.email
+        )

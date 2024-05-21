@@ -23,7 +23,7 @@ class UserRepository:
         return result
     
     
-    def create(self, create_user: CreateUser) -> OutputUser:
+    def create(self, create_user: CreateUser) -> User:
         user = User(
             name=create_user.name,
             email=create_user.email,
@@ -33,8 +33,4 @@ class UserRepository:
         self.session.commit()
         self.session.refresh(user)
 
-        return OutputUser(
-            id=user.id,
-            name=user.name,
-            email=user.email
-        )
+        return user
