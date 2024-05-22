@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.schemas.books import OutputBook, CreateBook, UpdateBook
@@ -17,9 +17,12 @@ async def individual_book(id: int, session: Session = Depends(get_db)):
     return book
 
 
-@router.post("/books")
-async def create_book(req_body: CreateBook):
-    pass
+@router.post("/books", status_code=status.HTTP_201_CREATED, response_model=OutputBook)
+async def create_book(req_body: CreateBook, session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    book = BookService(session, user).create(req_body)
+
+    return book
 
 
 @router.patch("/books/{id}")

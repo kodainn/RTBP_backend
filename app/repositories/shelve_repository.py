@@ -44,17 +44,20 @@ class ShelveRepository:
         return result
 
     
-    def user_has_has_shelve_by_shelve_name(self, user_id: int, shelve_name: str) -> bool:
+    def user_has_has_shelve_by_name(self, user_id: int, name: str) -> bool:
         query = self.session.query(Shelve)
-        query = query.filter_by(user_id=user_id, name=shelve_name, is_deleted=False)
+        query = query.filter_by(user_id=user_id, name=name, is_deleted=False)
 
         result = query.first()
 
         return result is not None
     
 
-    def create(self, create_shelve: CreateShelve) -> Shelve:
-        shelve = Shelve(name=create_shelve.name)
+    def create(self, user_id: int, create_shelve: CreateShelve) -> Shelve:
+        shelve = Shelve(
+            name=create_shelve.name,
+            user_id=user_id,
+        )
         self.session.add(shelve)
         self.session.commit()
         self.session.refresh(shelve)
