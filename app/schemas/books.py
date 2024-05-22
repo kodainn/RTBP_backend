@@ -15,7 +15,7 @@ class OutputBook(BaseModel):
 
 
 class CreateBook(BaseModel):
-    isbn:         int
+    isbn:         Optional[int]
     title:        str
     shelve_id:    int
     remark:       Union[str, None]
@@ -24,7 +24,7 @@ class CreateBook(BaseModel):
 
 class UpdateBook(BaseModel):
     id:           int
-    isbn:         int
+    isbn:         Optional[int]
     title:        str
     remark:       Union[str, None]
     img_url:      Union[str, None]

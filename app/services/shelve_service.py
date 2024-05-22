@@ -53,14 +53,14 @@ class ShelveService:
 
 
     def create(self, req_body: CreateShelve) -> OutputShelve:
-        has_shelve = self.shelve_repository.user_has_has_shelve_by_shelve_name(self.user.id, req_body.name)
+        has_shelve = self.shelve_repository.user_has_has_shelve_by_name(self.user.id, req_body.name)
         if has_shelve:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="その棚名は既に登録されています。"
             )
 
-        shelve = self.shelve_repository.create(req_body)
+        shelve = self.shelve_repository.create(self.user.id, req_body)
 
         return OutputShelve(
             id=shelve.id,
