@@ -76,11 +76,11 @@ class ShelveService:
                 detail="その本棚は存在しません。"
             )
 
-        shelve = self.shelve_repository.update(id, self.user.id, req_body)
+        updated_shelve = self.shelve_repository.update(self.user.id, id, req_body)
 
         return OutputShelve(
-            id=shelve.id,
-            name=shelve.name
+            id=updated_shelve.id,
+            name=updated_shelve.name
         )
     
 

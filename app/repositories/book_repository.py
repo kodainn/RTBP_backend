@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from app.database.model.models import Book, Shelve
-from app.schemas.books import CreateBook
+from app.schemas.books import CreateBook, UpdateBook
 
 
 
@@ -14,7 +14,7 @@ class BookRepository:
         self.session = session
 
     
-    def user_has_find_by_id(self, user_id: int, id: int) -> Book:
+    def user_has_find_by_id(self, user_id: int, id: int) -> Optional[Book]:
         query = self.session.query(Book)
         query = query.filter_by(id=id, user_id=user_id, is_deleted=False)
 
@@ -56,6 +56,23 @@ class BookRepository:
         return result is not None
     
 
+    def user_has_has_some_book_by_title(self, user_id: int, id: int, title: str) -> bool:
+        query = self.session.query(Book)
+        query = query.filter(Book.user_id==user_id, Book.id != id, Book.title == title, Book.is_deleted==False)
+
+        result = query.first()
+
+        return result is not None
+    
+
+    def user_has_individual_by_id(self, user_id: int, id: int) -> Optional[Book]:
+        query = self.session.query(Book)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+
+        result = query.first()
+
+        return result
+
     def create(self, user_id: int, create_book: CreateBook) -> Book:
         book = Book(
                 isbn=create_book.isbn,
@@ -70,3 +87,19 @@ class BookRepository:
         self.session.refresh(book)
 
         return book
+    
+
+    def update(self, user_id: int, id: int, update_book: UpdateBook) -> Book:
+        query = self.session.query(Book)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+
+        result = query.first()
+        result.isbn = update_book.isbn
+        result.title = update_book.title
+        result.remark = update_book.remark
+        result.img_url = update_book.img_url
+        result.user_id = user_id,
+
+        self.session.commit()
+        
+        return result
