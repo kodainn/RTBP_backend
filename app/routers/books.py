@@ -33,6 +33,9 @@ async def update_book(id: int, req_body: UpdateBook, session: Session = Depends(
     return book
 
 
-@router.delete("/books/{id}")
-async def delete_book():
-    pass
+@router.delete("/books/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_book(id: int, session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    BookService(session, user).delete(id)
+
+    return
