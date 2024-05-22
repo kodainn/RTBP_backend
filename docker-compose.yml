@@ -4,7 +4,7 @@ services:
     container_name: library_manage_backend
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: /docker/app/Dockerfile
     volumes:
       - type: bind
         source: ./app
