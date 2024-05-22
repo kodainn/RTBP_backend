@@ -23,7 +23,6 @@ class CreateBook(BaseModel):
 
 
 class UpdateBook(BaseModel):
-    id:           int
     isbn:         Optional[int]
     title:        str
     remark:       Union[str, None]

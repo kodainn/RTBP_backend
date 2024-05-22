@@ -25,9 +25,12 @@ async def create_book(req_body: CreateBook, session: Session = Depends(get_db)):
     return book
 
 
-@router.patch("/books/{id}")
-async def update_book(req_body: UpdateBook):
-    pass
+@router.patch("/books/{id}", response_model=OutputBook)
+async def update_book(id: int, req_body: UpdateBook, session: Session = Depends(get_db)):
+    user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
+    book = BookService(session, user).update(id, req_body)
+
+    return book
 
 
 @router.delete("/books/{id}")

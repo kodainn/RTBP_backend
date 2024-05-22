@@ -24,7 +24,7 @@ class ShelveRepository:
         return result
     
 
-    def user_has_shelve_in_books(self, user_id: int, id: int) -> Shelve:
+    def user_has_shelve_in_books(self, user_id: int, id: int) -> Optional[Shelve]:
         query = self.session.query(Shelve)
         query = query.options(load_only('id', 'name'))
         query = query.options(selectinload(Shelve.books).load_only('id', 'title', 'img_url'))        
@@ -71,6 +71,7 @@ class ShelveRepository:
 
         result = query.first()
         result.name = update_shelve.name
+        result.user_id = user_id
 
         self.session.commit()
         
@@ -82,6 +83,7 @@ class ShelveRepository:
         query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
 
         result = query.first()
+        result.user_id = user_id
         result.is_deleted = True
 
         self.session.commit()

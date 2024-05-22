@@ -2,12 +2,14 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.repositories.book_repository import BookRepository
-from app.schemas.books import OutputBook, CreateBook
+from app.repositories.shelve_repository import ShelveRepository
+from app.schemas.books import OutputBook, CreateBook, UpdateBook
 from app.database.model.models import User
 
 class BookService:
     def __init__(self, session: Session, user: User):
         self.book_repository = BookRepository(session)
+        self.shelve_repository = ShelveRepository(session)
         self.user = user
     
 
@@ -34,7 +36,14 @@ class BookService:
         if has_book:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="その書籍は既に登録されています。"
+                detail="その書籍名は既に登録されています。"
+            )
+        
+        shelve = self.shelve_repository.user_has_individual_by_id(self.user.id, req_body.shelve_id)
+        if shelve is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="その本棚は存在しません。"
             )
         
         create_book = self.book_repository.create(self.user.id, req_body)
@@ -46,4 +55,31 @@ class BookService:
             title=create_book.title,
             remark=create_book.remark,
             img_url=create_book.img_url
+        )
+    
+
+    def update(self, id: int, req_body: UpdateBook) -> OutputBook:
+        book = self.book_repository.user_has_individual_by_id(self.user.id, id)
+        if book is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="その本棚は存在しません。"
+            )
+        
+        has_some_book = self.book_repository.user_has_has_some_book_by_title(self.user.id, id, req_body.title)
+        if has_some_book:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="その書籍名は既に登録されています。"
+            )
+
+        updated_book = self.book_repository.update(self.user.id, id, req_body)
+
+        return OutputBook(
+            id=updated_book.id,
+            isbn=updated_book.isbn,
+            title=updated_book.title,
+            shelve_name=updated_book.shelve.name,
+            remark=updated_book.remark,
+            img_url=updated_book.img_url,
         )
