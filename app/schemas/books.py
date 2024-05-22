@@ -1,10 +1,10 @@
-from typing import Union
+from typing import Union, Optional
 from pydantic import BaseModel
 
 
-class Book(BaseModel):
+class OutputBook(BaseModel):
     id:           int
-    isnb:         int
+    isbn:         Optional[int]
     shelve_name:  str
     title:        str
     remark:       Union[str, None]

@@ -11,7 +11,16 @@ from app.database.model.models import Book, Shelve
 class BookRepository:
     def __init__(self, session: Session):
         self.session = session
+
     
+    def user_has_find_by_id(self, user_id: int, id: int) -> Book:
+        query = self.session.query(Book)
+        query = query.filter_by(id=id, user_id=user_id, is_deleted=False)
+
+        result = query.first()
+
+        return result
+
 
     def user_has_count(self, user_id: int) -> int:
         query = self.session.query(Book)
