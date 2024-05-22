@@ -103,3 +103,14 @@ class BookRepository:
         self.session.commit()
         
         return result
+    
+
+    def delete(self, user_id: int, id: int) -> None:
+        query = self.session.query(Book)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+
+        result = query.first()
+        result.user_id = user_id
+        result.is_deleted = True
+
+        self.session.commit()

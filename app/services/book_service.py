@@ -83,3 +83,14 @@ class BookService:
             remark=updated_book.remark,
             img_url=updated_book.img_url,
         )
+    
+
+    def delete(self, id: int) -> None:
+        shelve = self.book_repository.user_has_find_by_id(self.user.id, id)
+        if shelve is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="その書籍は存在しません。"
+            )
+        
+        self.book_repository.delete(self.user.id, id)
