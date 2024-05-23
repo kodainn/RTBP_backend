@@ -42,6 +42,9 @@ async def delete_studying_book(id: int, session: Session = Depends(get_db)):
     return
 
 
-@router.post("/studying-books/{id}/record")
-async def create_studying_book_record(req_body: CreateStudyingBookRecord, ):
-    pass
+@router.post("/studying-books/{id}/record", response_model=OutputStudyingBook, status_code=status.HTTP_201_CREATED)
+async def create_studying_book_record(id: int, req_body: CreateStudyingBookRecord, session: Session = Depends(get_db)):
+    user = User(id=1, name="Tanaka",email="Tanaka@example.com",password="password")
+    studying_book = StudyingBookService(session, user).create_record(id, req_body)
+
+    return studying_book

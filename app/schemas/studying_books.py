@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -13,6 +13,7 @@ class StudyingBookInList(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ListStudyingBooks(BaseModel):
     studying_books: List[StudyingBookInList]
 
@@ -25,12 +26,24 @@ class TargetItem(BaseModel):
     class Config:
         orm_mode = True
 
+
+class StudyTrack(BaseModel):
+    id:               int
+    minutes:          int
+    study_on:         date
+    studying_book_id: int
+
+    class Config:
+        orm_mode = True
+
+
 class OutputStudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
     target_items: List[TargetItem]
-
+    study_tracks: List[Optional[StudyTrack]]
+    
     class Config:
         orm_mode = True
 

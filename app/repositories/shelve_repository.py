@@ -1,5 +1,3 @@
-from datetime import date
-
 from typing import Optional, List
 from sqlalchemy.orm import Session, selectinload, load_only
 

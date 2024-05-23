@@ -6,7 +6,8 @@ from typing import List
 from app.repositories.book_repository import BookRepository
 from app.repositories.studying_book_repository import StudyingBookRepository
 from app.repositories.target_item_repository import TargetItemRepository
-from app.schemas.studying_books import CreateStudyingBook, ListStudyingBooks, StudyingBookInList, OutputStudyingBook
+from app.repositories.study_track_repository import StudyTrackRepository
+from app.schemas.studying_books import CreateStudyingBook, ListStudyingBooks, StudyingBookInList, OutputStudyingBook, CreateStudyingBookRecord
 from app.database.model.models import User
 
 class StudyingBookService:
@@ -14,6 +15,7 @@ class StudyingBookService:
         self.book_repository = BookRepository(session)
         self.studying_book_repository = StudyingBookRepository(session)
         self.target_item_repository = TargetItemRepository(session)
+        self.study_track_repository = StudyTrackRepository(session)
         self.user = user
         self.session = session
 
@@ -50,7 +52,8 @@ class StudyingBookService:
             id=studying_book.id,
             start_on=studying_book.start_on,
             target_on=studying_book.target_on,
-            target_items=studying_book.target_items
+            target_items=studying_book.target_items,
+            study_tracks=studying_book.study_tracks
         )
 
 
@@ -75,7 +78,35 @@ class StudyingBookService:
             id=studying_book.id,
             start_on=studying_book.start_on,
             target_on=studying_book.target_on,
-            target_items=studying_book.target_items
+            target_items=studying_book.target_items,
+            study_tracks=studying_book.study_tracks
+        )
+    
+    
+    def create_record(self, id: int, req_body: CreateStudyingBookRecord) -> OutputStudyingBook:
+
+        try:
+            with self.session.begin():
+                studying_book = self.studying_book_repository.user_has_incompleted_individual(self.user.id, id)
+                if studying_book is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail="その学習書籍は存在しません。"
+                    )
+                self.target_item_repository.update(id, req_body)
+                self.study_track_repository.create(id, req_body)
+        except SQLAlchemyError as e:
+            self.session.rollback()
+            raise e
+        
+        self.session.commit()
+
+        return OutputStudyingBook(
+            id=studying_book.id,
+            start_on=studying_book.start_on,
+            target_on=studying_book.target_on,
+            target_items=studying_book.target_items,
+            study_tracks=studying_book.study_tracks
         )
     
 
