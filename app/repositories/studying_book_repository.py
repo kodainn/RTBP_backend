@@ -62,6 +62,15 @@ class StudyingBookRepository:
         return result
     
 
+    def user_has_find_by_id(self, user_id: int, id: int):
+        query = self.session.query(StudyingBook)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+
+        result = query.first()
+
+        return result
+    
+
     def create(self, user_id: int, create_studying_book: CreateStudyingBook) -> StudyingBook:
         start_on = now_date()
 
@@ -77,3 +86,15 @@ class StudyingBookRepository:
         self.session.refresh(studying_book)
 
         return studying_book
+    
+
+    def delete(self, user_id: int, id: int) -> None:
+        query = self.session.query(StudyingBook)
+        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+        
+        result = query.first()
+        result.user_id = user_id
+        result.is_deleted = True
+        self.session.commit()
+
+        return
