@@ -1,0 +1,11 @@
+POST http://127.0.0.1:8000/studying-books HTTP/1.1
+content-type: application/json
+
+{
+    "book_id": 1,
+    "target_items": [
+        {"description": "database"},
+        {"description": "network"}
+    ],
+    "target_on": "2024-6-21"
+}
