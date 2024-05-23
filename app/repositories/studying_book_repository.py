@@ -78,7 +78,7 @@ class StudyingBookRepository:
         result = query.all()
 
         return result
-    
+
 
     def user_has_incompleted_individual(self, user_id: int, id: int) -> Optional[StudyingBook]:
         query = self.session.query(StudyingBook)
@@ -87,7 +87,6 @@ class StudyingBookRepository:
         result = query.first()
 
         return result
-
 
 
     def create(self, user_id: int, create_studying_book: CreateStudyingBook) -> StudyingBook:
