@@ -73,7 +73,7 @@ class StudyingBookRepository:
 
     def user_has_list(self, user_id: int) -> List[Optional[StudyingBook]]:
         query = self.session.query(StudyingBook)
-        query = query.filter_by(user_id=user_id, is_deleted=False)
+        query = query.filter_by(user_id=user_id, is_complated=False, is_deleted=False)
 
         result = query.all()
 

@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get("/studying-books", response_model=ListStudyingBooks)
 async def list_studying_books(session: Session = Depends(get_db)):
-    user = User(id=10, name="Tanaka",email="Tanaka@example.com",password="password")
+    user = User(id=1, name="Tanaka",email="Tanaka@example.com",password="password")
     studying_books = StudyingBookService(session, user).list_studying_books()
 
     return studying_books
