@@ -19,8 +19,11 @@ async def list_studying_books(session: Session = Depends(get_db)):
 
 
 @router.get("/studying-books/{id}", response_model=OutputStudyingBook)
-async def individual_studying_book():
-    pass
+async def individual_studying_book(id: int, session: Session = Depends(get_db)):
+    user = User(id=1, name="Tanaka",email="Tanaka@example.com",password="password")
+    studying_book = StudyingBookService(session, user).individual_studying_book(id)
+
+    return studying_book
 
 
 @router.post("/studying-books", response_model=OutputStudyingBook, status_code=status.HTTP_201_CREATED)
