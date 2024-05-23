@@ -1,11 +1,12 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
+from typing import List
 
 from app.repositories.book_repository import BookRepository
 from app.repositories.studying_book_repository import StudyingBookRepository
 from app.repositories.target_item_repository import TargetItemRepository
-from app.schemas.studying_books import CreateStudyingBook, OutputStudyingBook
+from app.schemas.studying_books import CreateStudyingBook, ListStudyingBooks, StudyingBookInList, OutputStudyingBook
 from app.database.model.models import User
 
 class StudyingBookService:
@@ -15,7 +16,27 @@ class StudyingBookService:
         self.target_item_repository = TargetItemRepository(session)
         self.user = user
         self.session = session
-    
+
+
+    def list_studying_books(self) -> ListStudyingBooks:
+        studying_books = self.studying_book_repository.user_has_list(self.user.id)
+
+        response_studying_books = []
+        for studying_book in studying_books:
+            response_studying_books.append(
+                StudyingBookInList(
+                    id=studying_book.id,
+                    title=studying_book.book.title,
+                    img_url=studying_book.book.img_url,
+                    start_on=studying_book.start_on,
+                    target_on=studying_book.target_on
+                )
+            )
+        
+        return ListStudyingBooks(
+            studying_books=response_studying_books
+        )
+
 
     def create(self, req_body: CreateStudyingBook) -> OutputStudyingBook:        
         try:

@@ -3,7 +3,7 @@ from typing import List
 from pydantic import BaseModel
 
 
-class StudyingBook(BaseModel):
+class StudyingBookInList(BaseModel):
     id:        int
     title:     str
     img_url:   str
@@ -14,7 +14,7 @@ class StudyingBook(BaseModel):
         orm_mode = True
 
 class ListStudyingBooks(BaseModel):
-    studying_books: List[StudyingBook]
+    studying_books: List[StudyingBookInList]
 
 
 class TargetItem(BaseModel):

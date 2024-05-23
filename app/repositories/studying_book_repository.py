@@ -1,6 +1,6 @@
 from datetime import date
 
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -70,6 +70,15 @@ class StudyingBookRepository:
 
         return result
     
+
+    def user_has_list(self, user_id: int) -> List[Optional[StudyingBook]]:
+        query = self.session.query(StudyingBook)
+        query = query.filter_by(user_id=user_id, is_deleted=False)
+
+        result = query.all()
+
+        return result
+
 
     def create(self, user_id: int, create_studying_book: CreateStudyingBook) -> StudyingBook:
         start_on = now_date()
