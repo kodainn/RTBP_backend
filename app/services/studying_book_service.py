@@ -19,7 +19,7 @@ class StudyingBookService:
 
 
     def list_studying_books(self) -> ListStudyingBooks:
-        studying_books = self.studying_book_repository.user_has_list(self.user.id)
+        studying_books = self.studying_book_repository.user_has_incompleted_list(self.user.id)
 
         response_studying_books = []
         for studying_book in studying_books:
@@ -35,6 +35,22 @@ class StudyingBookService:
         
         return ListStudyingBooks(
             studying_books=response_studying_books
+        )
+    
+
+    def individual_studying_book(self, id: int) -> OutputStudyingBook:
+        studying_book = self.studying_book_repository.user_has_incompleted_individual(self.user.id, id)
+        if studying_book is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="その学習書籍は存在しません。"
+            )
+        
+        return OutputStudyingBook(
+            id=studying_book.id,
+            start_on=studying_book.start_on,
+            target_on=studying_book.target_on,
+            target_items=studying_book.target_items
         )
 
 
