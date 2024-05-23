@@ -40,4 +40,16 @@ class StudyingBookService:
             target_on=studying_book.target_on,
             target_items=studying_book.target_items
         )
+    
 
+    def delete(self, id: int) -> None:
+        studying_book = self.studying_book_repository.user_has_find_by_id(self.user.id, id)
+        if studying_book is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="その書籍を存在しません。"
+            )
+        
+        self.studying_book_repository.delete(self.user.id, id)
+
+        return
