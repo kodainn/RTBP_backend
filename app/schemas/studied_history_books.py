@@ -3,13 +3,14 @@ from pydantic import BaseModel
 from datetime import date
 
 class StudiedHistoryBook(BaseModel):
-    id:            int
+    book_id:       int
     title:         str
     img_url:       str
     studied_count: int
 
     class Config:
         orm_mode = True
+
 
 class ListStudiedHistoryBooks(BaseModel):
     studied_history_books: List[Optional[StudiedHistoryBook]]

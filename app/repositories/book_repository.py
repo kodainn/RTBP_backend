@@ -4,7 +4,7 @@ from typing import Optional, List, Dict
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from app.database.model.models import Book, Shelve
+from app.database.model.models import Book, Shelve, StudyingBook
 from app.schemas.books import CreateBook, UpdateBook
 
 
@@ -72,6 +72,18 @@ class BookRepository:
         result = query.first()
 
         return result
+    
+
+    def user_has_complated_in_count_list(self, user_id: int) -> List[Optional[Dict]]:
+        query = self.session.query(Book.id, Book.title, Book.img_url, func.count(StudyingBook.id).label("studied_count"))
+        query = query.join(Book, Book.id == StudyingBook.book_id)
+        query = query.filter(Book.user_id == user_id, StudyingBook.is_complated == True)
+        query = query.group_by(Book.id, Book.title, Book.img_url)
+
+        result = query.all()
+
+        return result
+
 
     def create(self, user_id: int, create_book: CreateBook) -> Book:
         book = Book(
