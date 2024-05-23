@@ -1,22 +1,31 @@
-from fastapi import APIRouter, Depends
-import app.schemas.studying_books as schema
-from app.utils.auth import oauth2_scheme
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+
+from app.schemas.studying_books import ListStudyingBooks, OutputStudyingBook, CreateStudyingBook, CreateStudyingBookRecord
+from app.services.studying_book_service import StudyingBookService
+from app.database.config.connect import get_db
+from app.database.model.models import User
+
+
 
 router = APIRouter()
 
-@router.get("/studying-books", response_model=schema.ListStudyingBooks)
+@router.get("/studying-books", response_model=ListStudyingBooks)
 async def list_studying_books():
     pass
 
 
-@router.get("/studying-books/{id}", response_model=schema.IndividualStudyingBook)
+@router.get("/studying-books/{id}", response_model=OutputStudyingBook)
 async def individual_studying_book():
     pass
 
 
-@router.post("/studying-books")
-async def create_studying_book(req_body: schema.CreateStudyingBook, ):
-    pass
+@router.post("/studying-books", response_model=OutputStudyingBook, status_code=status.HTTP_201_CREATED)
+async def create_studying_book(req_body: CreateStudyingBook, session: Session = Depends(get_db)):
+    user = User(id=1, name="Tanaka",email="Tanaka@example.com",password="password")
+    studying_book = StudyingBookService(session, user).create(req_body)
+
+    return studying_book
 
 
 @router.delete("/studying-books/{id}")
@@ -25,5 +34,5 @@ async def delete_studying_book():
 
 
 @router.post("/studying-books/{id}/record")
-async def create_studying_book_record(req_body: schema.CreateStudyingBookRecord, ):
+async def create_studying_book_record(req_body: CreateStudyingBookRecord, ):
     pass

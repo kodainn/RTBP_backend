@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from app.database.model.models import StudyingBook
+from app.schemas.studying_books import CreateStudyingBook
+from app.utils.datetime_jp import now_date
 
 
 
@@ -58,3 +60,20 @@ class StudyingBookRepository:
         result = query.first()
         
         return result
+    
+
+    def create(self, user_id: int, create_studying_book: CreateStudyingBook) -> StudyingBook:
+        start_on = now_date()
+
+        studying_book = StudyingBook(
+            start_on=start_on,
+            target_on=create_studying_book.target_on,
+            user_id=user_id,
+            book_id=create_studying_book.book_id
+        )
+
+        self.session.add(studying_book)
+        self.session.flush()
+        self.session.refresh(studying_book)
+
+        return studying_book

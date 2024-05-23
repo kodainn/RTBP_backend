@@ -52,11 +52,11 @@ class StudyingBook(Base):
     __tablename__ = 'studying_books'
 
     id            = Column(Integer, primary_key=True, autoincrement=True)
-    memo          = Column(String(50), nullable=False)
+    memo          = Column(String(255))
     start_on      = Column(Date, nullable=False)
     target_on     = Column(Date, nullable=False)
-    user_id       = Column(Integer, ForeignKey("users.id"))
-    book_id       = Column(Integer, ForeignKey("books.id"))
+    user_id       = Column(Integer, ForeignKey("users.id"), nullable=False)
+    book_id       = Column(Integer, ForeignKey("books.id"), nullable=False)
     is_complated  = Column(Boolean, default=False)
     is_deleted    = Column(Boolean, default=False) 
     created_at    = Column(DateTime, default=func.now())

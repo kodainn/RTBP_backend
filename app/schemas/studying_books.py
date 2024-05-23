@@ -25,7 +25,7 @@ class TargetItem(BaseModel):
     class Config:
         orm_mode = True
 
-class IndividualStudyingBook(BaseModel):
+class OutputStudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
