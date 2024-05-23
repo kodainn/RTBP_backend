@@ -11,8 +11,11 @@ from app.database.model.models import User
 router = APIRouter()
 
 @router.get("/studying-books", response_model=ListStudyingBooks)
-async def list_studying_books():
-    pass
+async def list_studying_books(session: Session = Depends(get_db)):
+    user = User(id=1, name="Tanaka",email="Tanaka@example.com",password="password")
+    studying_books = StudyingBookService(session, user).list_studying_books()
+
+    return studying_books
 
 
 @router.get("/studying-books/{id}", response_model=OutputStudyingBook)
