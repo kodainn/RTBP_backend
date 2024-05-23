@@ -2,7 +2,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.database.model.models import User
-from app.schemas.users import CreateUser, OutputUser
+from app.schemas.users import CreateUser
 from app.utils.auth_password import create_hash_password
 
 

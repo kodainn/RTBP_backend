@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, exists, and_, cast, Integer
 
 from app.database.model.models import StudyingBook, StudyTrack
+from app.schemas.studying_books import CreateStudyingBookRecord
+from app.utils.datetime_jp import now_date
 
 
 class StudyTrackRepository:
@@ -50,3 +52,18 @@ class StudyTrackRepository:
         result = query.all()
         
         return result
+    
+
+    def create(self, studying_book_id: int, create_studying_book_record: CreateStudyingBookRecord) -> None:
+        study_on = now_date()
+
+        create_study_track = StudyTrack(
+                minutes=create_studying_book_record.study_minutes,
+                study_on=study_on,
+                studying_book_id=studying_book_id
+            )
+        
+        self.session.add(create_study_track)
+        self.session.flush()
+
+        return
