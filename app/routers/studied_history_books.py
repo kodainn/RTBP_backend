@@ -16,6 +16,9 @@ async def list_studied_history_books(session: Session = Depends(get_db)):
 
     return studied_history_books
 
-@router.get("/studied-history-books/{id}", response_model=ListStudiedHistories)
-async def individual_studied_history_book():
-    pass
+@router.get("/studied-history-books/{book_id}")
+async def individual_studied_history_book(book_id: int, session: Session = Depends(get_db)):
+    user = User(id=1, name="Tanaka",email="Tanaka@example.com",password="password")
+    studied_histories = StudiedHistoryBookService(session, user).individual_studied_history_book(book_id)
+
+    return studied_histories
