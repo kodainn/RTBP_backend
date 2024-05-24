@@ -4,7 +4,7 @@ from typing import Dict, Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from app.database.model.models import StudyingBook
+from app.database.model.models import StudyingBook, StudyTrack
 from app.schemas.studying_books import CreateStudyingBook
 from app.utils.datetime_jp import now_date
 
@@ -74,6 +74,22 @@ class StudyingBookRepository:
     def user_has_incompleted_list(self, user_id: int) -> List[Optional[StudyingBook]]:
         query = self.session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, is_complated=False, is_deleted=False)
+
+        result = query.all()
+
+        return result
+    
+
+    def user_has_completed_in_minutes_list_by_book_id(self, user_id: int, book_id: int) -> List[Optional[Dict]]:
+        query = self.session.query(
+            StudyingBook,
+            func.sum(StudyTrack.minutes).label("study_minutes")
+            )
+        query = query.join(StudyingBook, StudyingBook.id == StudyTrack.studying_book_id)
+        query = query.filter_by(user_id=user_id, book_id=book_id, is_complated=True, is_deleted=False)
+        query = query.group_by(
+            StudyingBook
+        )
 
         result = query.all()
 
