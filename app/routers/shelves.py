@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+from typing import Optional
 
 from app.schemas.shelves import ListShelves, OutputShelve, ShelveInListBooks, CreateShelve, UpdateShelve
 from app.database.model.models import User
@@ -9,9 +10,9 @@ from app.services.shelve_service import ShelveService
 router = APIRouter()
 
 @router.get("/shelves", response_model=ListShelves)
-async def list_shelves(session: Session = Depends(get_db)):
+async def list_shelves(title: str = "", session: Session = Depends(get_db)):
     user = User(id=1,name="Tanaka",email="Tanaka@example.com",password="password")
-    shelves = ShelveService(session, user).list_shelves()
+    shelves = ShelveService(session, user).list_shelves(title)
 
     return shelves
 

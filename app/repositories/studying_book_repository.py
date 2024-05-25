@@ -123,8 +123,8 @@ class StudyingBookRepository:
         query = self.session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, id=id)
         
-        result = query.delete()
-        
+        query.delete()
+
         self.session.commit()
 
         return

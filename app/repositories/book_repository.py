@@ -124,3 +124,5 @@ class BookRepository:
         query.delete()
 
         self.session.commit()
+
+        return

@@ -1,7 +1,8 @@
 from typing import Optional, List
-from sqlalchemy.orm import Session, selectinload, load_only
+from sqlalchemy.orm import Session
+from sqlalchemy import exists, and_
 
-from app.database.model.models import Shelve
+from app.database.model.models import Shelve, Book
 from app.schemas.shelves import CreateShelve, UpdateShelve
 
 
@@ -11,11 +12,14 @@ class ShelveRepository:
         self.session = session
     
 
-    def user_has_list(self, user_id: int) -> List:
+    def user_with_list_in_book_like_title(self, user_id: int, title: str) -> List:
         query = self.session.query(Shelve)
-        query = query.options(load_only('id', 'name'))
-        query = query.options(selectinload(Shelve.books).load_only('id', 'title', 'img_url'))        
-        query = query.filter_by(user_id=user_id)
+        query = query.filter(
+                Shelve.user_id == user_id,
+                exists().where(
+                    and_(Shelve.id == Book.shelve_id, Book.title.ilike("%" + title + "%"))
+                )
+            )
 
         result = query.all()
     
@@ -23,9 +27,7 @@ class ShelveRepository:
     
 
     def user_has_shelve_in_books(self, user_id: int, id: int) -> Optional[Shelve]:
-        query = self.session.query(Shelve)
-        query = query.options(load_only('id', 'name'))
-        query = query.options(selectinload(Shelve.books).load_only('id', 'title', 'img_url'))        
+        query = self.session.query(Shelve)      
         query = query.filter_by(user_id=user_id, id=id)
 
         result = query.first()
@@ -80,6 +82,8 @@ class ShelveRepository:
         query = self.session.query(Shelve)
         query = query.filter_by(user_id=user_id, id=id)
 
-        result = query.delete()
+        query.delete()
 
         self.session.commit()
+
+        return

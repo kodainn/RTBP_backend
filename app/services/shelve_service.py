@@ -18,8 +18,15 @@ class ShelveService:
         self.user = user
 
 
-    def list_shelves(self) -> ListShelves:
-        shelves = self.shelve_repository.user_has_list(self.user.id)
+    def list_shelves(self, title: str) -> ListShelves:
+        shelves = self.shelve_repository.user_with_list_in_book_like_title(self.user.id, title)
+
+        for shelve in shelves:
+            filter_books = []
+            for book in shelve.books:
+                if title in book.title:
+                    filter_books.append(book)
+            shelve.books = filter_books
 
         return ListShelves(
             shelves=shelves
