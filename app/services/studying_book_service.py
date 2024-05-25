@@ -44,7 +44,7 @@ class StudyingBookService:
         if studying_book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その学習書籍は存在しません。"
+                detail="Study book not found."
             )
         
         book = Book(
@@ -76,7 +76,7 @@ class StudyingBookService:
                 if book is None:
                     raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,
-                        detail="その書籍は存在しません。"
+                        detail="Book not found."
                     )
                 
                 studying_book = self.studying_book_repository.create(self.user.id, req_body)

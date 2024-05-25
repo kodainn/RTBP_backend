@@ -84,7 +84,7 @@ class ShelveService:
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その本棚は存在しません。"
+                detail="Bookshelf not found."
             )
 
         updated_shelve = self.shelve_repository.update(self.user.id, id, req_body)
@@ -100,7 +100,7 @@ class ShelveService:
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その本棚は存在しません。"
+                detail="Bookshelf not found."
             )
         
         self.shelve_repository.delete(id, self.user.id)
