@@ -18,7 +18,7 @@ class BookService:
         if book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その本棚は存在しません。"
+                detail="Book not found."
             )
         
         return OutputBook(
@@ -36,14 +36,14 @@ class BookService:
         if has_book:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="その書籍名は既に登録されています。"
+                detail="The name of that book is already registered."
             )
         
         shelve = self.shelve_repository.user_with_individual_by_id(self.user.id, req_body.shelve_id)
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その本棚は存在しません。"
+                detail="Bookshelf not found."
             )
         
         create_book = self.book_repository.create(self.user.id, req_body)
@@ -63,14 +63,14 @@ class BookService:
         if book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その本棚は存在しません。"
+                detail="Book not found."
             )
         
         has_some_book = self.book_repository.user_with_has_some_book_by_title(self.user.id, id, req_body.title)
         if has_some_book:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="その書籍名は既に登録されています。"
+                detail="The name of that book is already registered."
             )
 
         updated_book = self.book_repository.update(self.user.id, id, req_body)
@@ -90,7 +90,7 @@ class BookService:
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その書籍は存在しません。"
+                detail="Book not found."
             )
         
         self.book_repository.delete(self.user.id, id)

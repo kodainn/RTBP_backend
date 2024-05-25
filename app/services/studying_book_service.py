@@ -91,7 +91,7 @@ class StudyingBookService:
                 if studying_book is None:
                     raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,
-                        detail="その学習書籍は存在しません。"
+                        detail="Study book not found."
                     )
                 self.target_item_repository.update(id, req_body)
                 self.study_track_repository.create(id, req_body)
@@ -115,7 +115,7 @@ class StudyingBookService:
         if studying_book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その書籍を存在しません。"
+                detail="Book not found."
             )
         
         self.studying_book_repository.delete(self.user.id, id)

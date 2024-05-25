@@ -38,7 +38,7 @@ class ShelveService:
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その本棚は存在しません。"
+                detail="Bookshelf not found."
             )
         
         return OutputShelve(
@@ -52,7 +52,7 @@ class ShelveService:
         if shelve_in_books is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="その本棚は存在しません。"
+                detail="Bookshelf not found."
             )
         
         return ShelveInListBooks(
@@ -68,7 +68,7 @@ class ShelveService:
         if has_shelve:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="その棚名は既に登録されています。"
+                detail="The shelf name is already registered."
             )
 
         shelve = self.shelve_repository.create(self.user.id, req_body)

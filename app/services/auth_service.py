@@ -17,13 +17,13 @@ class AuthService:
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="ユーザーが見つかりませんでした。"
+                detail="User not found."
             )
         
         if not vertify_password(user.password, req_body.password):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="パスワードが正しくありません。"
+                detail="Password is incorrect."
             )
         
         accsess_token = create_access_token(user.name)

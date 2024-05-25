@@ -40,7 +40,7 @@ class StudiedHistoryBookService:
         if len(studied_histories) == 0:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="書籍履歴が存在しません。"
+                detail="Book history not found."
             )
         
         response_studied_histories = []
