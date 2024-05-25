@@ -37,6 +37,36 @@ class StudyTrack(BaseModel):
         orm_mode = True
 
 
+class Book(BaseModel):
+    id:           int
+    shelve_name:  str
+    title:        str
+    remark:       Optional[str]
+    img_url:      Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class StudyingBook(BaseModel):
+    id:           int
+    start_on:     date
+    target_on:    date
+    memo:         Optional[str]
+    target_items: List[TargetItem]
+    
+    class Config:
+        orm_mode = True
+
+
+class IndividualStudyingBook(BaseModel):
+    book:          Book
+    studying_book: StudyingBook
+
+    class Config:
+        orm_mode = True
+
+
 class OutputStudyingBook(BaseModel):
     id:           int
     start_on:     date
@@ -66,5 +96,5 @@ class CreateComplateTargetItem(BaseModel):
 
 class CreateStudyingBookRecord(BaseModel):
     target_complate_items: List[CreateComplateTargetItem]
-    memo:                  Optional[str] = Field(max_length=255)
+    memo:                  str = Field(max_length=255)
     study_minutes:         int

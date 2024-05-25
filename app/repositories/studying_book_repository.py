@@ -119,6 +119,18 @@ class StudyingBookRepository:
         return studying_book
     
 
+    def update_memo(self, user_id: int, id: int, memo: str) -> StudyingBook:
+        query = self.session.query(StudyingBook)
+        query = query.filter_by(user_id=user_id, id=id)
+        
+        result = query.first()
+        result.memo = memo
+
+        self.session.flush()
+
+        return result
+
+
     def delete(self, user_id: int, id: int) -> None:
         query = self.session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, id=id)

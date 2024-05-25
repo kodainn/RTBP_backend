@@ -35,5 +35,18 @@ class StudiedHistory(BaseModel):
     class Config:
         orm_mode = True
 
-class ListStudiedHistories(BaseModel):
+
+class Book(BaseModel):
+    id:           int
+    shelve_name:  str
+    title:        str
+    remark:       Optional[str]
+    img_url:      Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class InvidualStudiedHistoryBook(BaseModel):
+    book:              Book
     studied_histories: List[Optional[StudiedHistory]]

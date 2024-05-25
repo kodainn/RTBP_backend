@@ -1,13 +1,12 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
-from typing import List
 
 from app.repositories.book_repository import BookRepository
 from app.repositories.studying_book_repository import StudyingBookRepository
 from app.repositories.target_item_repository import TargetItemRepository
 from app.repositories.study_track_repository import StudyTrackRepository
-from app.schemas.studying_books import CreateStudyingBook, ListStudyingBooks, StudyingBookInList, OutputStudyingBook, CreateStudyingBookRecord
+from app.schemas.studying_books import CreateStudyingBook, ListStudyingBooks, StudyingBookInList, OutputStudyingBook, CreateStudyingBookRecord, Book, StudyingBook, IndividualStudyingBook
 from app.database.model.models import User
 
 class StudyingBookService:
@@ -40,7 +39,7 @@ class StudyingBookService:
         )
     
 
-    def individual_studying_book(self, id: int) -> OutputStudyingBook:
+    def individual_studying_book(self, id: int) -> IndividualStudyingBook:
         studying_book = self.studying_book_repository.user_with_incompleted_individual(self.user.id, id)
         if studying_book is None:
             raise HTTPException(
@@ -48,12 +47,25 @@ class StudyingBookService:
                 detail="その学習書籍は存在しません。"
             )
         
-        return OutputStudyingBook(
+        book = Book(
+            id=studying_book.book.id,
+            shelve_name=studying_book.book.shelve.name,
+            title=studying_book.book.title,
+            remark=studying_book.book.remark,
+            img_url=studying_book.book.img_url
+        )
+
+        studying_book = StudyingBook(
             id=studying_book.id,
             start_on=studying_book.start_on,
             target_on=studying_book.target_on,
-            target_items=studying_book.target_items,
-            study_tracks=studying_book.study_tracks
+            memo=studying_book.memo,
+            target_items=studying_book.target_items
+        )
+        
+        return IndividualStudyingBook(
+            book=book,
+            studying_book=studying_book
         )
 
 
@@ -78,9 +90,11 @@ class StudyingBookService:
             id=studying_book.id,
             start_on=studying_book.start_on,
             target_on=studying_book.target_on,
+            memo=studying_book.memo,
             target_items=studying_book.target_items,
             study_tracks=studying_book.study_tracks
         )
+    
     
     
     def create_record(self, id: int, req_body: CreateStudyingBookRecord) -> OutputStudyingBook:
@@ -93,6 +107,7 @@ class StudyingBookService:
                         status_code=status.HTTP_404_NOT_FOUND,
                         detail="Study book not found."
                     )
+                updated_studying_book = self.studying_book_repository.update_memo(self.user.id, id, req_body.memo)
                 self.target_item_repository.update(id, req_body)
                 self.study_track_repository.create(id, req_body)
         except SQLAlchemyError as e:
@@ -105,6 +120,7 @@ class StudyingBookService:
             id=studying_book.id,
             start_on=studying_book.start_on,
             target_on=studying_book.target_on,
+            memo=updated_studying_book.memo,
             target_items=studying_book.target_items,
             study_tracks=studying_book.study_tracks
         )

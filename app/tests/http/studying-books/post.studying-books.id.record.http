@@ -16,5 +16,6 @@ content-type: application/json
             "is_completed": true
         }
     ],
+    "memo": "fffff",
     "study_minutes": 100
 }

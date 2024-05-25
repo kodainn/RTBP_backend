@@ -1,11 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import SQLAlchemyError
-from typing import List
 
 from app.repositories.book_repository import BookRepository
 from app.repositories.studying_book_repository import StudyingBookRepository
-from app.schemas.studied_history_books import ListStudiedHistoryBooks, StudiedHistoryBook, ListStudiedHistories, StudiedHistory
+from app.schemas.studied_history_books import ListStudiedHistoryBooks, StudiedHistoryBook, InvidualStudiedHistoryBook, StudiedHistory, Book
 from app.database.model.models import User
 
 class StudiedHistoryBookService:
@@ -13,7 +11,6 @@ class StudiedHistoryBookService:
         self.studying_book_repository = StudyingBookRepository(session)
         self.book_repository = BookRepository(session)
         self.user = user
-        self.session = session
 
     
     def list_studied_history_books(self) -> ListStudiedHistoryBooks:
@@ -35,7 +32,7 @@ class StudiedHistoryBookService:
         )
     
 
-    def individual_studied_history_book(self, book_id: int):
+    def individual_studied_history_book(self, book_id: int) -> InvidualStudiedHistoryBook:
         studied_histories = self.studying_book_repository.user_with_completed_in_minutes_list_by_book_id(self.user.id, book_id)
         if len(studied_histories) == 0:
             raise HTTPException(
@@ -55,6 +52,19 @@ class StudiedHistoryBookService:
                     study_minutes=studied_history.study_minutes
                 )
             )
+        
+        book = self.book_repository.user_with_find_by_id(self.user.id, book_id)
+        history_book = Book(
+            id=book.id,
+            shelve_name=book.shelve.name,
+            title=book.title,
+            remark=book.remark,
+            img_url=book.img_url
+        )
 
-        return response_studied_histories
+
+        return InvidualStudiedHistoryBook(
+            book=history_book,
+            studied_histories=response_studied_histories
+        )
         
