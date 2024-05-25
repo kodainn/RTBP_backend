@@ -14,7 +14,7 @@ class StudyTrackRepository:
         self.session = session
     
 
-    def user_has_total_minutes(self, user_id: int) -> int:
+    def user_with_total_minutes(self, user_id: int) -> int:
         query = self.session.query(func.sum(StudyTrack.minutes).label("user_total_minutes"))
         query = query.filter(
                 exists().where(
@@ -30,7 +30,7 @@ class StudyTrackRepository:
         return result["user_total_minutes"]
     
 
-    def user_has_monthly_total_by_year(self, year: int, user_id: int) -> List:
+    def user_with_monthly_total_by_year(self, year: int, user_id: int) -> List:
         start_date = date(year, 1, 1)
         end_date = date(year, 12, 31)
         
