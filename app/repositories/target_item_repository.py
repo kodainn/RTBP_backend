@@ -35,12 +35,12 @@ class TargetItemRepository:
         complate_target_items = []
         for target_complate_item in create_studying_book_record.target_complate_items:
             # 目標達成が完了になるもののみ更新対象とする、不正なIDによる更新をさせない
-            if not target_complate_item.is_complated or target_complate_item.id not in regular_id_list:
+            if not target_complate_item.is_completed or target_complate_item.id not in regular_id_list:
                 continue
 
             complate_target_items.append({
                 "id": target_complate_item.id,
-                "is_complated": True
+                "is_completed": True
             })
         
         self.session.bulk_update_mappings(TargetItem, complate_target_items)

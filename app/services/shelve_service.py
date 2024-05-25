@@ -6,11 +6,15 @@ from sqlalchemy.orm import Session
 from app.schemas.shelves import ListShelves, CreateShelve, OutputShelve, UpdateShelve, ShelveInListBooks
 from app.database.model.models import User
 from app.repositories.shelve_repository import ShelveRepository
+from app.repositories.studying_book_repository import StudyingBookRepository
+from app.repositories.book_repository import BookRepository
 
 
 class ShelveService:
     def __init__(self, session: Session, user: User):
         self.shelve_repository = ShelveRepository(session)
+        self.studying_book_repository = StudyingBookRepository(session)
+        self.book_repository = BookRepository(session)
         self.user = user
 
 
