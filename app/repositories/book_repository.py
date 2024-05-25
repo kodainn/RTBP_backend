@@ -16,7 +16,7 @@ class BookRepository:
     
     def user_has_find_by_id(self, user_id: int, id: int) -> Optional[Book]:
         query = self.session.query(Book)
-        query = query.filter_by(id=id, user_id=user_id, is_deleted=False)
+        query = query.filter_by(id=id, user_id=user_id)
 
         result = query.first()
 
@@ -25,7 +25,7 @@ class BookRepository:
 
     def user_has_count(self, user_id: int) -> int:
         query = self.session.query(Book)
-        query = query.filter_by(user_id=user_id, is_deleted=False)
+        query = query.filter_by(user_id=user_id)
 
         result = query.count()
 
@@ -38,7 +38,7 @@ class BookRepository:
                 func.count(Book.id).label("book_count")
             )
         query = query.join(Book, Book.shelve_id == Shelve.id)
-        query = query.filter_by(user_id=user_id, is_deleted=False)
+        query = query.filter_by(user_id=user_id)
         query = query.group_by("shelve_name")
         query = query.order_by("shelve_name")
         
@@ -49,7 +49,7 @@ class BookRepository:
 
     def user_has_has_book_by_title(self, user_id: int, title: str) -> bool:
         query = self.session.query(Book)
-        query = query.filter_by(user_id=user_id, title=title, is_deleted=False)
+        query = query.filter_by(user_id=user_id, title=title)
 
         result = query.first()
 
@@ -58,7 +58,7 @@ class BookRepository:
 
     def user_has_has_some_book_by_title(self, user_id: int, id: int, title: str) -> bool:
         query = self.session.query(Book)
-        query = query.filter(Book.user_id==user_id, Book.id != id, Book.title == title, Book.is_deleted==False)
+        query = query.filter(Book.user_id==user_id, Book.id != id, Book.title == title)
 
         result = query.first()
 
@@ -67,7 +67,7 @@ class BookRepository:
 
     def user_has_individual_by_id(self, user_id: int, id: int) -> Optional[Book]:
         query = self.session.query(Book)
-        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+        query = query.filter_by(user_id=user_id, id=id)
 
         result = query.first()
 
@@ -77,7 +77,7 @@ class BookRepository:
     def user_has_complated_in_count_list(self, user_id: int) -> List[Optional[Dict]]:
         query = self.session.query(Book.id, Book.title, Book.img_url, func.count(StudyingBook.id).label("studied_count"))
         query = query.join(Book, Book.id == StudyingBook.book_id)
-        query = query.filter(Book.user_id == user_id, StudyingBook.is_complated == True)
+        query = query.filter(Book.user_id == user_id, StudyingBook.is_completed == True)
         query = query.group_by(Book.id, Book.title, Book.img_url)
 
         result = query.all()
@@ -103,7 +103,7 @@ class BookRepository:
 
     def update(self, user_id: int, id: int, update_book: UpdateBook) -> Book:
         query = self.session.query(Book)
-        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+        query = query.filter_by(user_id=user_id, id=id)
 
         result = query.first()
         result.isbn = update_book.isbn
@@ -119,10 +119,8 @@ class BookRepository:
 
     def delete(self, user_id: int, id: int) -> None:
         query = self.session.query(Book)
-        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+        query = query.filter_by(user_id=user_id, id=id)
 
-        result = query.first()
-        result.user_id = user_id
-        result.is_deleted = True
+        query.delete()
 
         self.session.commit()

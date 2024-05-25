@@ -19,7 +19,7 @@ class ListStudiedHistoryBooks(BaseModel):
 class TargetItem(BaseModel):
         id:           int
         description:  str
-        is_complated: bool
+        is_completed: bool
 
         class Config:
             orm_mode = True

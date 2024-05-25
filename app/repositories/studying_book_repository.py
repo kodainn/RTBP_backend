@@ -21,8 +21,7 @@ class StudyingBookRepository:
                 StudyingBook.user_id == user_id,
                 StudyingBook.start_on <= period_on,
                 StudyingBook.target_on >= period_on,
-                StudyingBook.is_complated == True,
-                StudyingBook.is_deleted == False
+                StudyingBook.is_completed == True
             )
         
         result = query.count()
@@ -36,8 +35,7 @@ class StudyingBookRepository:
                 StudyingBook.user_id == user_id,
                 StudyingBook.start_on <= period_on,
                 StudyingBook.target_on >= period_on,
-                StudyingBook.is_complated == False,
-                StudyingBook.is_deleted == False
+                StudyingBook.is_completed == False
             )
         
         result = query.count()
@@ -53,8 +51,7 @@ class StudyingBookRepository:
         query = query.filter(
                 StudyingBook.user_id == user_id,
                 StudyingBook.start_on <= period_on,
-                StudyingBook.target_on >= period_on,
-                StudyingBook.is_deleted == False
+                StudyingBook.target_on >= period_on
             )
         
         result = query.first()
@@ -64,7 +61,7 @@ class StudyingBookRepository:
 
     def user_has_find_by_id(self, user_id: int, id: int):
         query = self.session.query(StudyingBook)
-        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+        query = query.filter_by(user_id=user_id, id=id)
 
         result = query.first()
 
@@ -73,7 +70,7 @@ class StudyingBookRepository:
 
     def user_has_incompleted_list(self, user_id: int) -> List[Optional[StudyingBook]]:
         query = self.session.query(StudyingBook)
-        query = query.filter_by(user_id=user_id, is_complated=False, is_deleted=False)
+        query = query.filter_by(user_id=user_id, is_completed=False)
 
         result = query.all()
 
@@ -86,7 +83,7 @@ class StudyingBookRepository:
             func.sum(StudyTrack.minutes).label("study_minutes")
             )
         query = query.join(StudyingBook, StudyingBook.id == StudyTrack.studying_book_id)
-        query = query.filter_by(user_id=user_id, book_id=book_id, is_complated=True, is_deleted=False)
+        query = query.filter_by(user_id=user_id, book_id=book_id, is_completed=True)
         query = query.group_by(
             StudyingBook
         )
@@ -98,7 +95,7 @@ class StudyingBookRepository:
 
     def user_has_incompleted_individual(self, user_id: int, id: int) -> Optional[StudyingBook]:
         query = self.session.query(StudyingBook)
-        query = query.filter_by(user_id=user_id, id=id, is_complated=False, is_deleted=False)
+        query = query.filter_by(user_id=user_id, id=id, is_completed=False)
 
         result = query.first()
 
@@ -124,11 +121,10 @@ class StudyingBookRepository:
 
     def delete(self, user_id: int, id: int) -> None:
         query = self.session.query(StudyingBook)
-        query = query.filter_by(user_id=user_id, id=id, is_deleted=False)
+        query = query.filter_by(user_id=user_id, id=id)
         
-        result = query.first()
-        result.user_id = user_id
-        result.is_deleted = True
+        result = query.delete()
+        
         self.session.commit()
 
         return
