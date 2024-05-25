@@ -1,6 +1,6 @@
 from datetime import date
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class StudyingBookInList(BaseModel):
@@ -41,6 +41,7 @@ class OutputStudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
+    memo:         Optional[str]
     target_items: List[TargetItem]
     study_tracks: List[Optional[StudyTrack]]
     
@@ -49,7 +50,7 @@ class OutputStudyingBook(BaseModel):
 
 
 class CrateTargetItem(BaseModel):
-    description: str
+    description: str = Field(min_length=1, max_length=255)
 
     
 class CreateStudyingBook(BaseModel):
@@ -65,4 +66,5 @@ class CreateComplateTargetItem(BaseModel):
 
 class CreateStudyingBookRecord(BaseModel):
     target_complate_items: List[CreateComplateTargetItem]
-    study_minutes:  int
+    memo:                  Optional[str] = Field(max_length=255)
+    study_minutes:         int

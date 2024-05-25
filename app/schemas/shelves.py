@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class OutputShelve(BaseModel):
     id:   int
@@ -32,8 +32,8 @@ class ListShelves(BaseModel):
 
 
 class CreateShelve(BaseModel):
-    name: str
+    name: str = Field(min_length=1, max_length=50)
 
 
 class UpdateShelve(BaseModel):
-    name: str
+    name: str = Field(min_length=1, max_length=50)
