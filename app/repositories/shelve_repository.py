@@ -26,7 +26,7 @@ class ShelveRepository:
         return result
     
 
-    def user_has_shelve_in_books(self, user_id: int, id: int) -> Optional[Shelve]:
+    def user_with_shelve_in_books(self, user_id: int, id: int) -> Optional[Shelve]:
         query = self.session.query(Shelve)      
         query = query.filter_by(user_id=user_id, id=id)
 
@@ -35,7 +35,7 @@ class ShelveRepository:
         return result
     
     
-    def user_has_individual_by_id(self, user_id: int, id: int) -> Optional[Shelve]:
+    def user_with_individual_by_id(self, user_id: int, id: int) -> Optional[Shelve]:
         query = self.session.query(Shelve)
         query = query.filter_by(user_id=user_id, id=id)
 
@@ -44,7 +44,7 @@ class ShelveRepository:
         return result
 
     
-    def user_has_has_shelve_by_name(self, user_id: int, name: str) -> bool:
+    def user_with_has_shelve_by_name(self, user_id: int, name: str) -> bool:
         query = self.session.query(Shelve)
         query = query.filter_by(user_id=user_id, name=name)
 

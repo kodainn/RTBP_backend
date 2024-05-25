@@ -14,7 +14,7 @@ class BookService:
     
 
     def individual_book(self, id: int) -> OutputBook:
-        book = self.book_repository.user_has_find_by_id(self.user.id, id)
+        book = self.book_repository.user_with_find_by_id(self.user.id, id)
         if book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -32,14 +32,14 @@ class BookService:
     
 
     def create(self, req_body: CreateBook) -> OutputBook:
-        has_book = self.book_repository.user_has_has_book_by_title(self.user.id, req_body.title)
+        has_book = self.book_repository.user_with_has_book_by_title(self.user.id, req_body.title)
         if has_book:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="その書籍名は既に登録されています。"
             )
         
-        shelve = self.shelve_repository.user_has_individual_by_id(self.user.id, req_body.shelve_id)
+        shelve = self.shelve_repository.user_with_individual_by_id(self.user.id, req_body.shelve_id)
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -59,14 +59,14 @@ class BookService:
     
 
     def update(self, id: int, req_body: UpdateBook) -> OutputBook:
-        book = self.book_repository.user_has_individual_by_id(self.user.id, id)
+        book = self.book_repository.user_with_individual_by_id(self.user.id, id)
         if book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="その本棚は存在しません。"
             )
         
-        has_some_book = self.book_repository.user_has_has_some_book_by_title(self.user.id, id, req_body.title)
+        has_some_book = self.book_repository.user_with_has_some_book_by_title(self.user.id, id, req_body.title)
         if has_some_book:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
@@ -86,7 +86,7 @@ class BookService:
     
 
     def delete(self, id: int) -> None:
-        shelve = self.book_repository.user_has_find_by_id(self.user.id, id)
+        shelve = self.book_repository.user_with_find_by_id(self.user.id, id)
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

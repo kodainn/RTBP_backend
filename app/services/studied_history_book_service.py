@@ -17,7 +17,7 @@ class StudiedHistoryBookService:
 
     
     def list_studied_history_books(self) -> ListStudiedHistoryBooks:
-        studied_history_books = self.book_repository.user_has_complated_in_count_list(self.user.id)
+        studied_history_books = self.book_repository.user_with_complated_in_count_list(self.user.id)
 
         response_studied_history_book = []
         for studied_history_book in studied_history_books:
@@ -36,7 +36,7 @@ class StudiedHistoryBookService:
     
 
     def individual_studied_history_book(self, book_id: int):
-        studied_histories = self.studying_book_repository.user_has_completed_in_minutes_list_by_book_id(self.user.id, book_id)
+        studied_histories = self.studying_book_repository.user_with_completed_in_minutes_list_by_book_id(self.user.id, book_id)
         if len(studied_histories) == 0:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

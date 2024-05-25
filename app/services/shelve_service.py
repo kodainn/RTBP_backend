@@ -34,7 +34,7 @@ class ShelveService:
     
 
     def individual_shelve(self, id: int) -> OutputShelve:
-        shelve = self.shelve_repository.user_has_individual_by_id(self.user.id, id)
+        shelve = self.shelve_repository.user_with_individual_by_id(self.user.id, id)
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -48,7 +48,7 @@ class ShelveService:
     
 
     def shelve_in_list_books(self, id: int) -> ShelveInListBooks:
-        shelve_in_books = self.shelve_repository.user_has_shelve_in_books(self.user.id, id)
+        shelve_in_books = self.shelve_repository.user_with_shelve_in_books(self.user.id, id)
         if shelve_in_books is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -64,7 +64,7 @@ class ShelveService:
 
 
     def create(self, req_body: CreateShelve) -> OutputShelve:
-        has_shelve = self.shelve_repository.user_has_has_shelve_by_name(self.user.id, req_body.name)
+        has_shelve = self.shelve_repository.user_with_has_shelve_by_name(self.user.id, req_body.name)
         if has_shelve:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
@@ -80,7 +80,7 @@ class ShelveService:
     
 
     def update(self, id: int, req_body: UpdateShelve) -> OutputShelve:
-        shelve = self.shelve_repository.user_has_individual_by_id(self.user.id, id)
+        shelve = self.shelve_repository.user_with_individual_by_id(self.user.id, id)
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -96,7 +96,7 @@ class ShelveService:
     
 
     def delete(self, id: int) -> None:
-        shelve = self.shelve_repository.user_has_individual_by_id(self.user.id, id)
+        shelve = self.shelve_repository.user_with_individual_by_id(self.user.id, id)
         if shelve is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

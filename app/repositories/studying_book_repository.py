@@ -15,7 +15,7 @@ class StudyingBookRepository:
         self.session = session
     
 
-    def user_has_complated_count_in_period(self, period_on: date, user_id: int) -> int:
+    def user_with_complated_count_in_period(self, period_on: date, user_id: int) -> int:
         query = self.session.query(StudyingBook)
         query = query.filter(
                 StudyingBook.user_id == user_id,
@@ -29,7 +29,7 @@ class StudyingBookRepository:
         return result
 
     
-    def user_has_incompleted_count_in_period(self, period_on: date, user_id: int) -> int:
+    def user_with_incompleted_count_in_period(self, period_on: date, user_id: int) -> int:
         query = self.session.query(StudyingBook)
         query = query.filter(
                 StudyingBook.user_id == user_id,
@@ -43,7 +43,7 @@ class StudyingBookRepository:
         return result
     
 
-    def user_has_period(self, period_on: date, user_id: int) -> Dict:
+    def user_with_period(self, period_on: date, user_id: int) -> Dict:
         query = self.session.query(
                 func.min(StudyingBook.start_on).label("start_study_period_on"),
                 func.max(StudyingBook.target_on).label('end_study_period_on')
@@ -59,7 +59,7 @@ class StudyingBookRepository:
         return result
     
 
-    def user_has_find_by_id(self, user_id: int, id: int):
+    def user_with_find_by_id(self, user_id: int, id: int):
         query = self.session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, id=id)
 
@@ -68,7 +68,7 @@ class StudyingBookRepository:
         return result
     
 
-    def user_has_incompleted_list(self, user_id: int) -> List[Optional[StudyingBook]]:
+    def user_with_incompleted_list(self, user_id: int) -> List[Optional[StudyingBook]]:
         query = self.session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, is_completed=False)
 
@@ -77,7 +77,7 @@ class StudyingBookRepository:
         return result
     
 
-    def user_has_completed_in_minutes_list_by_book_id(self, user_id: int, book_id: int) -> List[Optional[Dict]]:
+    def user_with_completed_in_minutes_list_by_book_id(self, user_id: int, book_id: int) -> List[Optional[Dict]]:
         query = self.session.query(
             StudyingBook,
             func.sum(StudyTrack.minutes).label("study_minutes")
@@ -93,7 +93,7 @@ class StudyingBookRepository:
         return result
 
 
-    def user_has_incompleted_individual(self, user_id: int, id: int) -> Optional[StudyingBook]:
+    def user_with_incompleted_individual(self, user_id: int, id: int) -> Optional[StudyingBook]:
         query = self.session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, id=id, is_completed=False)
 

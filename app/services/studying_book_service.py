@@ -21,7 +21,7 @@ class StudyingBookService:
 
 
     def list_studying_books(self) -> ListStudyingBooks:
-        studying_books = self.studying_book_repository.user_has_incompleted_list(self.user.id)
+        studying_books = self.studying_book_repository.user_with_incompleted_list(self.user.id)
 
         response_studying_books = []
         for studying_book in studying_books:
@@ -41,7 +41,7 @@ class StudyingBookService:
     
 
     def individual_studying_book(self, id: int) -> OutputStudyingBook:
-        studying_book = self.studying_book_repository.user_has_incompleted_individual(self.user.id, id)
+        studying_book = self.studying_book_repository.user_with_incompleted_individual(self.user.id, id)
         if studying_book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -60,7 +60,7 @@ class StudyingBookService:
     def create(self, req_body: CreateStudyingBook) -> OutputStudyingBook:        
         try:
             with self.session.begin():
-                book = self.book_repository.user_has_find_by_id(self.user.id, req_body.book_id)
+                book = self.book_repository.user_with_find_by_id(self.user.id, req_body.book_id)
                 if book is None:
                     raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,
@@ -87,7 +87,7 @@ class StudyingBookService:
 
         try:
             with self.session.begin():
-                studying_book = self.studying_book_repository.user_has_incompleted_individual(self.user.id, id)
+                studying_book = self.studying_book_repository.user_with_incompleted_individual(self.user.id, id)
                 if studying_book is None:
                     raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,
@@ -111,7 +111,7 @@ class StudyingBookService:
     
 
     def delete(self, id: int) -> None:
-        studying_book = self.studying_book_repository.user_has_find_by_id(self.user.id, id)
+        studying_book = self.studying_book_repository.user_with_find_by_id(self.user.id, id)
         if studying_book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
