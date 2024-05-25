@@ -1,5 +1,6 @@
 POST http://127.0.0.1:8000/shelves HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY2MTg0NzIsInN1YiI6IjZETFZKUHF2VDkifQ.aVpmw7bgF_EjZrJdUjhY-8bBQ6hElbXswncyWQq192s
 
 {
     "name": "database"
