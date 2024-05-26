@@ -34,10 +34,25 @@ class DashboardService:
         total_minutes = self.study_track_repository.user_with_total_minutes(self.user.id)
         now_year = datetime_jp.now_year()
         monthly_total_by_year = self.study_track_repository.user_with_monthly_total_by_year(now_year, self.user.id)
+        month_exists_study_minutes = dict()
+        for month_total in monthly_total_by_year:
+            month_exists_study_minutes[month_total["month"]] = month_total["study_minutes"]
         
+        monthly_total_by_12_months = []
+        for month in range(1, 13):
+            study_minutes = 0
+            if month in month_exists_study_minutes:
+                study_minutes = month_exists_study_minutes[month]
+            
+            monthly_total_by_12_months.append({
+                "year":          now_year,
+                "month":         month,
+                "study_minutes": study_minutes
+            })
+
         return StudyTimes(
             study_minutes_total=total_minutes,
-            study_minutes_by_monthly=monthly_total_by_year
+            study_minutes_by_monthly=monthly_total_by_12_months
         )
     
 
