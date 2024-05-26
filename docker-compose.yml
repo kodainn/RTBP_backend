@@ -2,7 +2,7 @@ version: '1'
 services:
   backend:
     container_name: library_manage_backend
-    build: 
+    build:
       context: .
       dockerfile: /docker/app/Dockerfile
     volumes:
