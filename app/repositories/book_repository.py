@@ -87,7 +87,7 @@ class BookRepository:
 
     def create(self, user_id: int, create_book: CreateBook) -> Book:
         book = Book(
-                isbn=create_book.isbn,
+
                 title=create_book.title,
                 remark=create_book.remark,
                 img_url=create_book.img_url,
@@ -106,7 +106,6 @@ class BookRepository:
         query = query.filter_by(user_id=user_id, id=id)
 
         result = query.first()
-        result.isbn = update_book.isbn
         result.title = update_book.title
         result.remark = update_book.remark
         result.img_url = update_book.img_url

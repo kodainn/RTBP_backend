@@ -45,7 +45,6 @@ def seeder() -> None:
             book_id = (shelve_id - 1) * 10 + book_id
             books.append({
                 "id": book_id,
-                "isbn": "1111111111111",
                 "title": randomname(10),
                 "remark": randomname(30),
                 "img_url": "https://ebookstore.sony.jp/photo/LT00014922/LT000149223001280076_XLARGE.jpg",

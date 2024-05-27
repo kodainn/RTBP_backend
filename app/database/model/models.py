@@ -11,8 +11,8 @@ class User(Base):
     __tablename__ = 'users'
 
     id            = Column(Integer, primary_key=True, autoincrement=True)
-    name          = Column(String(50), nullable=False, unique=True)
-    email         = Column(String(50), nullable=False, unique=True)
+    name          = Column(String(80), nullable=False, unique=True)
+    email         = Column(String(80), nullable=False, unique=True)
     password      = Column(String(255), nullable=False)
     created_at    = Column(DateTime, default=func.now())
     updated_at    = Column(DateTime, default=func.now(), onupdate=func.now())
@@ -22,7 +22,7 @@ class Shelve(Base):
     __tablename__ = 'shelves'
 
     id            = Column(Integer, primary_key=True, autoincrement=True)
-    name          = Column(String(50), nullable=False, unique=True)
+    name          = Column(String(80), nullable=False, unique=True)
     user_id       = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     created_at    = Column(DateTime, default=func.now())
     updated_at    = Column(DateTime, default=func.now(), onupdate=func.now())
@@ -34,9 +34,8 @@ class Book(Base):
     __tablename__  = 'books'
 
     id             = Column(Integer, primary_key=True, autoincrement=True)
-    isbn           = Column(String(13))
-    title          = Column(String(50), nullable=False)
-    remark         = Column(String(255))
+    title          = Column(String(255), nullable=False)
+    remark         = Column(String(800))
     img_url        = Column(Text)
     user_id        = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     shelve_id      = Column(Integer, ForeignKey("shelves.id", ondelete="CASCADE"))
@@ -50,7 +49,7 @@ class StudyingBook(Base):
     __tablename__ = 'studying_books'
 
     id            = Column(Integer, primary_key=True, autoincrement=True)
-    memo          = Column(String(255))
+    memo          = Column(String(800))
     start_on      = Column(Date, nullable=False)
     target_on     = Column(Date, nullable=False)
     user_id       = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
@@ -67,7 +66,7 @@ class TargetItem(Base):
     __tablename__    = 'target_items'
 
     id               = Column(Integer, primary_key=True, autoincrement=True)
-    description      = Column(String(255), nullable=False)
+    description      = Column(String(800), nullable=False)
     is_completed     = Column(Boolean, default=False)
     studying_book_id = Column(Integer, ForeignKey("studying_books.id", ondelete="CASCADE"))
     created_at       = Column(DateTime, default=func.now())

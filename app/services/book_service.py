@@ -23,7 +23,6 @@ class BookService:
         
         return OutputBook(
             id=book.id,
-            isbn=book.isbn,
             shelve_name=book.shelve.name,
             title=book.title,
             remark=book.remark,
@@ -50,7 +49,6 @@ class BookService:
 
         return OutputBook(
             id=create_book.id,
-            isbn=create_book.isbn,
             shelve_name=create_book.shelve.name,
             title=create_book.title,
             remark=create_book.remark,
@@ -77,7 +75,6 @@ class BookService:
 
         return OutputBook(
             id=updated_book.id,
-            isbn=updated_book.isbn,
             title=updated_book.title,
             shelve_name=updated_book.shelve.name,
             remark=updated_book.remark,

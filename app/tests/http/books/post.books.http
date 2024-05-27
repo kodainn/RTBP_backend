@@ -2,9 +2,8 @@ POST http://127.0.0.1:8000/books HTTP/1.1
 content-type: application/json
 
 {
-    "isbn": 1234567890,
-    "title": "self-teaching-PHP6",
+    "title": "self-teaching-PHP61efefefef1",
     "shelve_id": 1,
-    "remark": "test",
-    "img_url": "https://ebookstore.sony.jp/photo/LT00014922/LT000149223001280076_XLARGE.jpg"
+    "remark": "",
+    "img_url": ""
 }

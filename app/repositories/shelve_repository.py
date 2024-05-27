@@ -17,14 +17,22 @@ class ShelveRepository:
         query = query.filter(
                 Shelve.user_id == user_id,
                 exists().where(
-                    and_(Shelve.id == Book.shelve_id, Book.title.ilike("%" + title + "%"))
+                    and_(Shelve.id == Book.shelve_id, Book.title.like("%" + title + "%"))
                 )
             )
 
         result = query.all()
     
         return result
+
+
+    def user_with_list(self, user_id: int) -> List:
+        query = self.session.query(Shelve)
+        query = query.filter_by(user_id=user_id)
+
+        result = query.all()
     
+        return result
 
     def user_with_shelve_in_books(self, user_id: int, id: int) -> Optional[Shelve]:
         query = self.session.query(Shelve)      
@@ -47,6 +55,15 @@ class ShelveRepository:
     def user_with_has_shelve_by_name(self, user_id: int, name: str) -> bool:
         query = self.session.query(Shelve)
         query = query.filter_by(user_id=user_id, name=name)
+
+        result = query.first()
+
+        return result is not None
+    
+
+    def user_with_has_by_title_except_id(self, user_id, name: str, id: int) -> bool:
+        query = self.session.query(Shelve)
+        query = query.filter(Shelve.user_id == user_id, Shelve.name == name, Shelve.id != id)
 
         result = query.first()
 

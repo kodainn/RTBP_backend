@@ -40,8 +40,8 @@ class Book(BaseModel):
     id:           int
     shelve_name:  str
     title:        str
-    remark:       Optional[str]
-    img_url:      Optional[str]
+    remark:       str
+    img_url:      str
 
     class Config:
         orm_mode = True

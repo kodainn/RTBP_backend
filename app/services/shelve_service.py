@@ -19,6 +19,12 @@ class ShelveService:
 
 
     def list_shelves(self, title: str) -> ListShelves:
+        if len(title) == 0:
+            shelves = self.shelve_repository.user_with_list(self.user.id)
+            return ListShelves(
+                shelves=shelves
+            )
+        
         shelves = self.shelve_repository.user_with_list_in_book_like_title(self.user.id, title)
 
         for shelve in shelves:
@@ -85,6 +91,13 @@ class ShelveService:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Bookshelf not found."
+            )
+        
+        has_shelve = self.shelve_repository.user_with_has_by_title_except_id(self.user.id, req_body.name, id)
+        if has_shelve:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="The shelf name is already registered."
             )
 
         updated_shelve = self.shelve_repository.update(self.user.id, id, req_body)

@@ -41,8 +41,8 @@ class Book(BaseModel):
     id:           int
     shelve_name:  str
     title:        str
-    remark:       Optional[str]
-    img_url:      Optional[str]
+    remark:       str
+    img_url:      str
 
     class Config:
         orm_mode = True
@@ -52,7 +52,7 @@ class StudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
-    memo:         Optional[str]
+    memo:         str
     target_items: List[TargetItem]
     
     class Config:
@@ -71,7 +71,7 @@ class OutputStudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
-    memo:         Optional[str]
+    memo:         str
     target_items: List[TargetItem]
     study_tracks: List[Optional[StudyTrack]]
     
