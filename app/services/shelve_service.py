@@ -116,5 +116,5 @@ class ShelveService:
                 detail="Bookshelf not found."
             )
         
-        self.shelve_repository.delete(id, self.user.id)
+        self.shelve_repository.delete(self.user.id, id)
 
