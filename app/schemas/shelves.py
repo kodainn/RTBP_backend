@@ -12,7 +12,7 @@ class OutputShelve(BaseModel):
 class Book(BaseModel):
     id:      int
     title:   str
-    img_url: str
+    img_url: Optional[str]
 
     class Config:
         orm_mode = True

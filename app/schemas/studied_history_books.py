@@ -5,7 +5,7 @@ from datetime import date
 class StudiedHistoryBook(BaseModel):
     book_id:       int
     title:         str
-    img_url:       str
+    img_url:       Optional[str]
     studied_count: int
 
     class Config:
@@ -29,7 +29,7 @@ class StudiedHistory(BaseModel):
     start_on:      date
     target_on:     date
     target_items:  List[Optional[TargetItem]]
-    memo:          str
+    memo:          Optional[str]
     study_minutes: int
 
     class Config:
@@ -40,8 +40,8 @@ class Book(BaseModel):
     id:           int
     shelve_name:  str
     title:        str
-    remark:       str
-    img_url:      str
+    remark:       Optional[str]
+    img_url:      Optional[str]
 
     class Config:
         orm_mode = True

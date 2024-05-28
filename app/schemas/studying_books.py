@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 class StudyingBookInList(BaseModel):
     id:        int
     title:     str
-    img_url:   str
+    img_url:   Optional[str]
     start_on:  date
     target_on: date
 
@@ -41,8 +41,8 @@ class Book(BaseModel):
     id:           int
     shelve_name:  str
     title:        str
-    remark:       str
-    img_url:      str
+    remark:       Optional[str]
+    img_url:      Optional[str]
 
     class Config:
         orm_mode = True
@@ -52,7 +52,7 @@ class StudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
-    memo:         str
+    memo:         Optional[str]
     target_items: List[TargetItem]
     
     class Config:
@@ -71,7 +71,7 @@ class OutputStudyingBook(BaseModel):
     id:           int
     start_on:     date
     target_on:    date
-    memo:         str
+    memo:         Optional[str]
     target_items: List[TargetItem]
     study_tracks: List[Optional[StudyTrack]]
     
@@ -80,7 +80,7 @@ class OutputStudyingBook(BaseModel):
 
 
 class CrateTargetItem(BaseModel):
-    description: str = Field(min_length=1, max_length=255)
+    description: str = Field(min_length=1, max_length=150)
 
     
 class CreateStudyingBook(BaseModel):
@@ -96,5 +96,5 @@ class CreateComplateTargetItem(BaseModel):
 
 class CreateStudyingBookRecord(BaseModel):
     target_complate_items: List[CreateComplateTargetItem]
-    memo:                  str = Field(max_length=255)
+    memo:                  Optional[str] = Field(max_length=255)
     study_minutes:         int
