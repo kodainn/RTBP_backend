@@ -96,5 +96,5 @@ class CreateComplateTargetItem(BaseModel):
 
 class CreateStudyingBookRecord(BaseModel):
     target_complate_items: List[CreateComplateTargetItem]
-    memo:                  Optional[str] = Field(max_length=255)
+    memo:                  Optional[str] = Field(max_length=200)
     study_minutes:         int

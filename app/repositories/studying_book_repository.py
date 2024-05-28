@@ -119,12 +119,13 @@ class StudyingBookRepository:
         return studying_book
     
 
-    def update_memo(self, user_id: int, id: int, memo: str) -> StudyingBook:
+    def update_memo_and_is_completed(self, user_id: int, id: int, memo: str, is_completed: bool) -> StudyingBook:
         query = self.session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, id=id)
         
         result = query.first()
         result.memo = memo
+        result.is_completed = is_completed
 
         self.session.flush()
 

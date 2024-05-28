@@ -107,7 +107,15 @@ class StudyingBookService:
                         status_code=status.HTTP_404_NOT_FOUND,
                         detail="Study book not found."
                     )
-                updated_studying_book = self.studying_book_repository.update_memo(self.user.id, id, req_body.memo)
+                
+                #学習完了か判定
+                is_all_complated = True
+                for target_completed in req_body.target_complate_items:
+                    if not target_completed.is_completed:
+                        is_all_complated = False
+                        break
+
+                updated_studying_book = self.studying_book_repository.update_memo_and_is_completed(self.user.id, id, req_body.memo, is_all_complated)
                 self.target_item_repository.update(id, req_body)
                 self.study_track_repository.create(id, req_body)
         except SQLAlchemyError as e:
