@@ -69,69 +69,67 @@ class StudyingBookService:
         )
 
 
-    def create(self, req_body: CreateStudyingBook) -> OutputStudyingBook:        
-        try:
-            with self.session.begin():
-                book = self.book_repository.user_with_find_by_id(self.user.id, req_body.book_id)
-                if book is None:
-                    raise HTTPException(
-                        status_code=status.HTTP_404_NOT_FOUND,
-                        detail="Book not found."
-                    )
-                
-                studying_book = self.studying_book_repository.create(self.user.id, req_body)
-                self.target_item_repository.create(studying_book.id, req_body)
+    def create(self, req_body: CreateStudyingBook) -> OutputStudyingBook:
+        book = self.book_repository.user_with_find_by_id(self.user.id, req_body.book_id)
+        if book is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Book not found."
+            )
+        
+        try:        
+            studying_book = self.studying_book_repository.create(self.session, self.user.id, req_body)
+            self.target_item_repository.create(self.session, studying_book.id, req_body)
+
+            self.session.commit()
+
+            return OutputStudyingBook(
+                id=studying_book.id,
+                start_on=studying_book.start_on,
+                target_on=studying_book.target_on,
+                memo=studying_book.memo,
+                target_items=studying_book.target_items,
+                study_tracks=studying_book.study_tracks
+            )
         except SQLAlchemyError as e:
             self.session.rollback()
             raise e
-        
-
-        return OutputStudyingBook(
-            id=studying_book.id,
-            start_on=studying_book.start_on,
-            target_on=studying_book.target_on,
-            memo=studying_book.memo,
-            target_items=studying_book.target_items,
-            study_tracks=studying_book.study_tracks
-        )
     
     
     
     def create_record(self, id: int, req_body: CreateStudyingBookRecord) -> OutputStudyingBook:
+        studying_book = self.studying_book_repository.user_with_incompleted_individual(self.user.id, id)
+        if studying_book is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Study book not found."
+            )
+        
+        try:    
+            #学習完了か判定
+            is_all_complated = True
+            for target_completed in req_body.target_complate_items:
+                if not target_completed.is_completed:
+                    is_all_complated = False
+                    break
 
-        try:
-            with self.session.begin():
-                studying_book = self.studying_book_repository.user_with_incompleted_individual(self.user.id, id)
-                if studying_book is None:
-                    raise HTTPException(
-                        status_code=status.HTTP_404_NOT_FOUND,
-                        detail="Study book not found."
-                    )
-                
-                #学習完了か判定
-                is_all_complated = True
-                for target_completed in req_body.target_complate_items:
-                    if not target_completed.is_completed:
-                        is_all_complated = False
-                        break
+            updated_studying_book = self.studying_book_repository.update_memo_and_is_completed(self.session, self.user.id, id, req_body.memo, is_all_complated)
+            self.target_item_repository.update(self.session, id, req_body)
+            self.study_track_repository.create(self.session, id, req_body)
 
-                updated_studying_book = self.studying_book_repository.update_memo_and_is_completed(self.user.id, id, req_body.memo, is_all_complated)
-                self.target_item_repository.update(id, req_body)
-                self.study_track_repository.create(id, req_body)
+            self.session.commit()
+
+            return OutputStudyingBook(
+                id=studying_book.id,
+                start_on=studying_book.start_on,
+                target_on=studying_book.target_on,
+                memo=updated_studying_book.memo,
+                target_items=studying_book.target_items,
+                study_tracks=studying_book.study_tracks
+            )
         except SQLAlchemyError as e:
             self.session.rollback()
             raise e
-        
-        self.session.commit()
-
-        return OutputStudyingBook(
-            id=studying_book.id,
-            start_on=studying_book.start_on,
-            target_on=studying_book.target_on,
-            memo=updated_studying_book.memo,
-            target_items=studying_book.target_items,
-            study_tracks=studying_book.study_tracks
-        )
     
 
     def delete(self, id: int) -> None:

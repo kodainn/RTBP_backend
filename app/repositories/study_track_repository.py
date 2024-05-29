@@ -54,7 +54,7 @@ class StudyTrackRepository:
         return result
     
 
-    def create(self, studying_book_id: int, create_studying_book_record: CreateStudyingBookRecord) -> None:
+    def create(self, session: Session, studying_book_id: int, create_studying_book_record: CreateStudyingBookRecord) -> None:
         study_on = now_date()
 
         create_study_track = StudyTrack(
@@ -63,7 +63,7 @@ class StudyTrackRepository:
                 studying_book_id=studying_book_id
             )
         
-        self.session.add(create_study_track)
-        self.session.flush()
+        session.add(create_study_track)
+        session.flush()
 
         return

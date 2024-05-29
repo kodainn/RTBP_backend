@@ -12,21 +12,19 @@ class TargetItemRepository:
         self.session = session
     
 
-    def create(self, studying_book_id: int, create_studying_book: CreateStudyingBook) -> None:
+    def create(self, session: Session, studying_book_id: int, create_studying_book: CreateStudyingBook) -> None:
         create_target_items = []
         for create_target_item in create_studying_book.target_items:
             create_target_items.append({
                     "description": create_target_item.description,
                     "studying_book_id": studying_book_id
                 })
-        
-        self.session.bulk_insert_mappings(TargetItem, create_target_items)
 
-        return
+        session.bulk_insert_mappings(TargetItem, create_target_items)
     
 
-    def update(self, studying_book_id: int, create_studying_book_record :CreateStudyingBookRecord) -> None:
-        query = self.session.query(TargetItem)
+    def update(self, session: Session, studying_book_id: int, create_studying_book_record :CreateStudyingBookRecord) -> None:
+        query = session.query(TargetItem)
         query = query.filter_by(studying_book_id=studying_book_id)
 
         result = query.all()
@@ -43,6 +41,6 @@ class TargetItemRepository:
                 "is_completed": True
             })
         
-        self.session.bulk_update_mappings(TargetItem, complate_target_items)
+        session.bulk_update_mappings(TargetItem, complate_target_items)
 
         return

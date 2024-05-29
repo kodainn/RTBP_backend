@@ -102,7 +102,7 @@ class StudyingBookRepository:
         return result
 
 
-    def create(self, user_id: int, create_studying_book: CreateStudyingBook) -> StudyingBook:
+    def create(self, session: Session, user_id: int, create_studying_book: CreateStudyingBook) -> StudyingBook:
         start_on = now_date()
 
         studying_book = StudyingBook(
@@ -112,22 +112,22 @@ class StudyingBookRepository:
             book_id=create_studying_book.book_id
         )
 
-        self.session.add(studying_book)
-        self.session.flush()
-        self.session.refresh(studying_book)
+        session.add(studying_book)
+        session.flush()
+        session.refresh(studying_book)
 
         return studying_book
     
 
-    def update_memo_and_is_completed(self, user_id: int, id: int, memo: str, is_completed: bool) -> StudyingBook:
-        query = self.session.query(StudyingBook)
+    def update_memo_and_is_completed(self, session: Session, user_id: int, id: int, memo: Optional[str], is_completed: bool) -> StudyingBook:
+        query = session.query(StudyingBook)
         query = query.filter_by(user_id=user_id, id=id)
         
         result = query.first()
         result.memo = memo
         result.is_completed = is_completed
 
-        self.session.flush()
+        session.flush()
 
         return result
 
